@@ -11,6 +11,6 @@ public class HerokuTestingController {
     @GetMapping
     @CrossOrigin
     public String  testHerokuServer() {
-        return "working";
+        return "asdasfas";
     }
 }
