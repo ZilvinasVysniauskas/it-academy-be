@@ -1,34 +1,29 @@
 package com.example.desk_reservation_app.controller;
 
-import com.example.desk_reservation_app.dto.api.RoomRequest;
-import com.example.desk_reservation_app.models.Desk;
-import com.example.desk_reservation_app.models.Room;
-import com.example.desk_reservation_app.repository.DeskRepository;
-import com.example.desk_reservation_app.service.RoomService;
+import com.example.desk_reservation_app.dto.api.RoomDto;
+import com.example.desk_reservation_app.models.*;
+import com.example.desk_reservation_app.repositories.*;
+import com.example.desk_reservation_app.services.DeskReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/v1/")
+@RequestMapping(value = "/api/v1/desks")
 public class DesksController {
 
-    @Autowired
-    private RoomService roomService;
+    private DeskReservationService deskReservationService;
 
-    @PostMapping(value = "room")
-    public void addRoom(@RequestBody RoomRequest roomRequest){
-        roomService.addRoom(roomRequest);
+    public DesksController(DeskReservationService deskReservationService) {
+        this.deskReservationService = deskReservationService;
     }
 
-    @GetMapping(value = "room")
-    public List<Room> getRooms(){
-        return roomService.findAllRooms();
+    @GetMapping
+    public List<RoomDto> getReservations(@RequestParam String date){
+        return deskReservationService.getTablesByDate(LocalDate.parse(date));
     }
 
-    @GetMapping(value = "desk")
-    public List<Desk> getDesks(){
-        return roomService.findAllDesks();
-    }
+
 }

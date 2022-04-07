@@ -12,27 +12,21 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Room {
+public class Floor {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String roomName;
+    private int floorNumber;
 
     @JsonManagedReference
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "room")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "floor")
     @ToString.Exclude
-    private List<Desk> desks = List.of();
+    private List<Room> rooms = List.of();
 
     @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "floor_id", referencedColumnName = "id")
-    private Floor floor;
-
-
-    public Room(String roomName, List<Desk> desks) {
-        this.roomName = roomName;
-        this.desks = desks;
-    }
+    @JoinColumn(name = "building_id", referencedColumnName = "id")
+    private Building building;
 }
