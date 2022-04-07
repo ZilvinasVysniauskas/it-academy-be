@@ -28,6 +28,7 @@ public class DeskReservationService {
     }
 
     public List<RoomDto> getTablesByDate(LocalDate date) {
+        //todo user can reserve only one table per day
         Floor floor = floorRepository.findById(1L).get();
         List<RoomDto> roomDtoList = floor.getRooms().stream()
                 .map(DeskMapper::RoomToRoomDto).collect(Collectors.toList());
