@@ -1,5 +1,6 @@
 package com.example.desk_reservation_app;
 
+import com.example.desk_reservation_app.models.Room;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
