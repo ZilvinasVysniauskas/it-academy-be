@@ -23,11 +23,11 @@ DROP TABLE IF EXISTS `address`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `address` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `city` varchar(255) DEFAULT NULL,
-  `number` int NOT NULL,
-  `street` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+                           `id` bigint NOT NULL AUTO_INCREMENT,
+                           `city` varchar(255) DEFAULT NULL,
+                           `number` int NOT NULL,
+                           `street` varchar(255) DEFAULT NULL,
+                           PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -49,11 +49,11 @@ DROP TABLE IF EXISTS `building`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `building` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `address_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKf3ryyh4bd143l5b8stt65hwgr` (`address_id`),
-  CONSTRAINT `FKf3ryyh4bd143l5b8stt65hwgr` FOREIGN KEY (`address_id`) REFERENCES `address` (`id`)
+                            `id` bigint NOT NULL AUTO_INCREMENT,
+                            `address_id` bigint DEFAULT NULL,
+                            PRIMARY KEY (`id`),
+                            KEY `FKf3ryyh4bd143l5b8stt65hwgr` (`address_id`),
+                            CONSTRAINT `FKf3ryyh4bd143l5b8stt65hwgr` FOREIGN KEY (`address_id`) REFERENCES `address` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -75,13 +75,13 @@ DROP TABLE IF EXISTS `desk`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `desk` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `desk_number` int NOT NULL,
-  `is_available` tinyint NOT NULL DEFAULT '1',
-  `room_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK1bdrqq8yryu4slrjw05x8ao8s` (`room_id`),
-  CONSTRAINT `FK1bdrqq8yryu4slrjw05x8ao8s` FOREIGN KEY (`room_id`) REFERENCES `room` (`id`)
+                        `id` bigint NOT NULL AUTO_INCREMENT,
+                        `desk_number` int NOT NULL,
+                        `is_available` tinyint NOT NULL DEFAULT '1',
+                        `room_id` bigint DEFAULT NULL,
+                        PRIMARY KEY (`id`),
+                        KEY `FK1bdrqq8yryu4slrjw05x8ao8s` (`room_id`),
+                        CONSTRAINT `FK1bdrqq8yryu4slrjw05x8ao8s` FOREIGN KEY (`room_id`) REFERENCES `room` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -103,12 +103,12 @@ DROP TABLE IF EXISTS `floor`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `floor` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `floor_number` int NOT NULL,
-  `building_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKfvb11l7lpgqc6qdrg3bm24kr3` (`building_id`),
-  CONSTRAINT `FKfvb11l7lpgqc6qdrg3bm24kr3` FOREIGN KEY (`building_id`) REFERENCES `building` (`id`)
+                         `id` bigint NOT NULL AUTO_INCREMENT,
+                         `floor_number` int NOT NULL,
+                         `building_id` bigint DEFAULT NULL,
+                         PRIMARY KEY (`id`),
+                         KEY `FKfvb11l7lpgqc6qdrg3bm24kr3` (`building_id`),
+                         CONSTRAINT `FKfvb11l7lpgqc6qdrg3bm24kr3` FOREIGN KEY (`building_id`) REFERENCES `building` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -130,15 +130,15 @@ DROP TABLE IF EXISTS `reservations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `reservations` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `date` date DEFAULT NULL,
-  `desk_id` bigint DEFAULT NULL,
-  `user_user_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FK5kvt0r1lvn2dy8ky0g9j0medq` (`desk_id`),
-  KEY `FKp65u1hd8e5ainp9oseyxwydgd` (`user_user_id`),
-  CONSTRAINT `FK5kvt0r1lvn2dy8ky0g9j0medq` FOREIGN KEY (`desk_id`) REFERENCES `desk` (`id`),
-  CONSTRAINT `FKp65u1hd8e5ainp9oseyxwydgd` FOREIGN KEY (`user_user_id`) REFERENCES `users_table` (`user_id`)
+                                `id` bigint NOT NULL AUTO_INCREMENT,
+                                `date` date DEFAULT NULL,
+                                `desk_id` bigint DEFAULT NULL,
+                                `user_user_id` bigint DEFAULT NULL,
+                                PRIMARY KEY (`id`),
+                                KEY `FK5kvt0r1lvn2dy8ky0g9j0medq` (`desk_id`),
+                                KEY `FKp65u1hd8e5ainp9oseyxwydgd` (`user_user_id`),
+                                CONSTRAINT `FK5kvt0r1lvn2dy8ky0g9j0medq` FOREIGN KEY (`desk_id`) REFERENCES `desk` (`id`),
+                                CONSTRAINT `FKp65u1hd8e5ainp9oseyxwydgd` FOREIGN KEY (`user_user_id`) REFERENCES `users_table` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -160,12 +160,12 @@ DROP TABLE IF EXISTS `room`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `room` (
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `room_name` varchar(255) DEFAULT NULL,
-  `floor_id` bigint DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `FKstlo96g0nkwp4urd4e0ki5b3h` (`floor_id`),
-  CONSTRAINT `FKstlo96g0nkwp4urd4e0ki5b3h` FOREIGN KEY (`floor_id`) REFERENCES `floor` (`id`)
+                        `id` bigint NOT NULL AUTO_INCREMENT,
+                        `room_name` varchar(255) DEFAULT NULL,
+                        `floor_id` bigint DEFAULT NULL,
+                        PRIMARY KEY (`id`),
+                        KEY `FKstlo96g0nkwp4urd4e0ki5b3h` (`floor_id`),
+                        CONSTRAINT `FKstlo96g0nkwp4urd4e0ki5b3h` FOREIGN KEY (`floor_id`) REFERENCES `floor` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -187,15 +187,15 @@ DROP TABLE IF EXISTS `users_table`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users_table` (
-  `user_id` bigint NOT NULL,
-  `active` tinyint NOT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `first_name` varchar(255) DEFAULT NULL,
-  `last_name` varchar(255) DEFAULT NULL,
-  `middle_name` varchar(255) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `role` int DEFAULT NULL,
-  PRIMARY KEY (`user_id`)
+                               `user_id` bigint NOT NULL,
+                               `active` tinyint NOT NULL,
+                               `email` varchar(255) DEFAULT NULL,
+                               `first_name` varchar(255) DEFAULT NULL,
+                               `last_name` varchar(255) DEFAULT NULL,
+                               `middle_name` varchar(255) DEFAULT NULL,
+                               `password` varchar(255) DEFAULT NULL,
+                               `role` int DEFAULT NULL,
+                               PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
