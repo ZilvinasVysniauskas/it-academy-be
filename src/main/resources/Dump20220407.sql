@@ -133,10 +133,13 @@ CREATE TABLE `reservations` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `date` date DEFAULT NULL,
   `desk_id` bigint DEFAULT NULL,
+  `user_user_id` bigint DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `FK5kvt0r1lvn2dy8ky0g9j0medq` (`desk_id`),
-  CONSTRAINT `FK5kvt0r1lvn2dy8ky0g9j0medq` FOREIGN KEY (`desk_id`) REFERENCES `desk` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `FKp65u1hd8e5ainp9oseyxwydgd` (`user_user_id`),
+  CONSTRAINT `FK5kvt0r1lvn2dy8ky0g9j0medq` FOREIGN KEY (`desk_id`) REFERENCES `desk` (`id`),
+  CONSTRAINT `FKp65u1hd8e5ainp9oseyxwydgd` FOREIGN KEY (`user_user_id`) REFERENCES `users_table` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -145,7 +148,7 @@ CREATE TABLE `reservations` (
 
 LOCK TABLES `reservations` WRITE;
 /*!40000 ALTER TABLE `reservations` DISABLE KEYS */;
-INSERT INTO `reservations` VALUES (1,'2022-04-10',1),(2,'2022-04-10',2),(3,'2022-04-10',10),(4,'2022-04-11',4),(5,'2022-05-11',5);
+INSERT INTO `reservations` VALUES (1,'2022-04-10',1,12345678),(2,'2022-04-10',2,12345678),(3,'2022-04-10',10,12345678),(4,'2022-04-11',4,12345678),(5,'2022-05-11',5,12345678),(6,'2022-04-30',2,12345678);
 /*!40000 ALTER TABLE `reservations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -175,6 +178,36 @@ LOCK TABLES `room` WRITE;
 INSERT INTO `room` VALUES (1,'Room Nr1',1),(2,'Room Nr2',1),(3,'Room Nr3',1),(4,'Room Nr4',1),(5,'Room Nr5',1);
 /*!40000 ALTER TABLE `room` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `users_table`
+--
+
+DROP TABLE IF EXISTS `users_table`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `users_table` (
+  `user_id` bigint NOT NULL,
+  `active` tinyint NOT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `first_name` varchar(255) DEFAULT NULL,
+  `last_name` varchar(255) DEFAULT NULL,
+  `middle_name` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `role` int DEFAULT NULL,
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users_table`
+--
+
+LOCK TABLES `users_table` WRITE;
+/*!40000 ALTER TABLE `users_table` DISABLE KEYS */;
+INSERT INTO `users_table` VALUES (12345678,1,'update@email.com','updatedFirstName','updatedLastName','updatedMiddleName','updatedFirstName',0),(123455879,0,'update@email.com','updatedFirstName','updatedLastName','updatedMiddleName','updatedFirstName',0),(123456879,1,'update@email.com','updatedFirstName','updatedLastName','updatedMiddleName','updatedFirstName',0);
+/*!40000 ALTER TABLE `users_table` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -183,6 +216,3 @@ UNLOCK TABLES;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2022-04-07 21:13:09
