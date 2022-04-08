@@ -1,5 +1,6 @@
 package com.example.desk_reservation_app.dto.api.user;
 
+import com.example.desk_reservation_app.models.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

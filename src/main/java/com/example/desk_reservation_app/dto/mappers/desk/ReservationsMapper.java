@@ -4,14 +4,15 @@ import com.example.desk_reservation_app.dto.api.admin.ReservationsAdminDto;
 import com.example.desk_reservation_app.dto.api.desks.DeskDto;
 import com.example.desk_reservation_app.dto.api.desks.ReservationsUserDto;
 import com.example.desk_reservation_app.dto.api.desks.RoomDto;
+import com.example.desk_reservation_app.dto.requests.ReservationRequest;
 import com.example.desk_reservation_app.models.Desk;
 import com.example.desk_reservation_app.models.Reservations;
 import com.example.desk_reservation_app.models.Room;
+import com.example.desk_reservation_app.models.User;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
-public class DeskMapper {
+public class ReservationsMapper {
 
     public static DeskDto DeskToDeskToDto(Desk desk) {
         return DeskDto.builder()
@@ -25,7 +26,7 @@ public class DeskMapper {
                 .roomId(room.getId())
                 .roomName(room.getRoomName())
                 .deskDtoList(room.getDesks().stream()
-                        .map(DeskMapper::DeskToDeskToDto)
+                        .map(ReservationsMapper::DeskToDeskToDto)
                         .collect(Collectors.toList()))
                 .build();
     }
@@ -49,6 +50,15 @@ public class DeskMapper {
                 .userName(reservations.getUser().getFirstName())
                 .userId(reservations.getUser().getUserId())
                 .roomName(reservations.getDesk().getRoom().getRoomName())
+                .build();
+    }
+
+    public static Reservations reservationRequestToReservation(ReservationRequest reservationRequest, Desk desk, User user) {
+        return Reservations.builder()
+                .date(reservationRequest.getDate())
+                .id(reservationRequest.getId())
+                .desk(desk)
+                .user(user)
                 .build();
     }
 }
