@@ -1,10 +1,9 @@
 package com.example.desk_reservation_app.controller;
 
-import com.example.desk_reservation_app.dto.api.RoomDto;
-import com.example.desk_reservation_app.models.*;
-import com.example.desk_reservation_app.repositories.*;
+import com.example.desk_reservation_app.dto.api.desks.ReservationsUserDto;
+import com.example.desk_reservation_app.dto.api.desks.RoomDto;
+import com.example.desk_reservation_app.models.Reservations;
 import com.example.desk_reservation_app.services.DeskReservationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -20,10 +19,18 @@ public class DesksController {
         this.deskReservationService = deskReservationService;
     }
 
-    @GetMapping
-    public List<RoomDto> getReservations(@RequestParam String date){
+    @GetMapping("/reservations")
+    @CrossOrigin
+    public List<ReservationsUserDto> getRoomsWithDesks(){
+        return deskReservationService.getUserReservations();
+    }
+
+    @GetMapping("/{date}")
+    @CrossOrigin
+    public List<RoomDto> getReservations(@PathVariable String date){
         return deskReservationService.getTablesByDate(LocalDate.parse(date));
     }
+
 
 
 }

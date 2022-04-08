@@ -1,15 +1,13 @@
 package com.example.desk_reservation_app.services;
 
-import com.example.desk_reservation_app.dto.ReservationInfo;
-import com.example.desk_reservation_app.dto.api.DeskDto;
-import com.example.desk_reservation_app.dto.mappers.DeskMapper;
-import com.example.desk_reservation_app.dto.api.RoomDto;
+import com.example.desk_reservation_app.dto.api.admin.ReservationsAdminDto;
+import com.example.desk_reservation_app.dto.api.desks.ReservationsUserDto;
+import com.example.desk_reservation_app.dto.mappers.desk.DeskMapper;
+import com.example.desk_reservation_app.dto.api.desks.RoomDto;
 import com.example.desk_reservation_app.models.Floor;
 import com.example.desk_reservation_app.models.Reservations;
-import com.example.desk_reservation_app.repositories.DeskRepository;
 import com.example.desk_reservation_app.repositories.FloorRepository;
 import com.example.desk_reservation_app.repositories.ReservationsRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -37,11 +35,23 @@ public class DeskReservationService {
             int roomId = Math.toIntExact(res.getDesk().getRoom().getId());
             int deskId = Math.toIntExact(res.getDesk().getId());
             roomDtoList.stream()
-                    .filter(a -> a.getId() == roomId)
+                    .filter(a -> a.getRoomId() == roomId)
                     .findFirst().get().getDeskDtoList().stream()
                     .filter(d -> d.getId() == deskId)
-                    .findFirst().get().reserveTable("userName", "additionalInfo");
+                    .findFirst().get().reserveTable(res.getUser().getFirstName(), res.getUser().getLastName());
         });
         return roomDtoList;
+    }
+
+    public List<ReservationsUserDto> getUserReservations() {
+        return this.reservationsRepository.findReservationsByUserUserId(12345678L)
+                .stream().map(DeskMapper::ReservationToReservationUserDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<ReservationsAdminDto> getAllReservationsForAdmin() {
+        return this.reservationsRepository.findAll().stream()
+                .map(DeskMapper::ReservationToReservationAdminDto)
+                .collect(Collectors.toList());
     }
 }

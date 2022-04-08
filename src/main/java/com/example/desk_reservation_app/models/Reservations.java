@@ -21,5 +21,8 @@ public class Reservations {
     @ManyToOne
     private Desk desk;
 
+    @ManyToOne
+    private User user;
+
     private LocalDate date;
 }

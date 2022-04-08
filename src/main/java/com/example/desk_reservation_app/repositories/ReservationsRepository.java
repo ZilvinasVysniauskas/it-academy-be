@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface ReservationsRepository extends JpaRepository<Reservations, Long> {
     List<Reservations> findAllByDate(LocalDate date);
-
+    List<Reservations> findReservationsByUserUserId(Long id);
 }
