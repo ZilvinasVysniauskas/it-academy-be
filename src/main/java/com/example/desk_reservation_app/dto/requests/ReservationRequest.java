@@ -18,4 +18,3 @@ public class ReservationRequest {
     private LocalDate date;
 
 }
-
