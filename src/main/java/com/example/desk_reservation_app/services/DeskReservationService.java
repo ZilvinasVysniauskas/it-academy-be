@@ -40,6 +40,7 @@ public class DeskReservationService {
         Floor floor = floorRepository.findById(1L).get();
         List<RoomDto> roomDtoList = floor.getRooms().stream()
                 .map(ReservationsMapper::RoomToRoomDto).collect(Collectors.toList());
+
         List<Reservations> reservations = reservationsRepository.findAllByDate(date);
         reservations.forEach(res -> {
             int roomId = Math.toIntExact(res.getDesk().getRoom().getId());
@@ -54,13 +55,15 @@ public class DeskReservationService {
     }
 
     public List<ReservationsUserDto> getUserReservations(Long id) {
-        //todo hardcoded userId
+        //todo Sandra check if any of reservations are executed
+        //pridet prie reservations userDTO
         return this.reservationsRepository.findReservationsByUserUserId(id)
                 .stream().map(ReservationsMapper::ReservationToReservationUserDto)
                 .collect(Collectors.toList());
     }
 
     public List<ReservationsAdminDto> getAllReservationsForAdmin() {
+        //todo Zymante check if any of reservations are executed (passed already)
         return this.reservationsRepository.findAll().stream()
                 .map(ReservationsMapper::ReservationToReservationAdminDto)
                 .collect(Collectors.toList());

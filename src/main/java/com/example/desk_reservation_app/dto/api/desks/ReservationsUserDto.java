@@ -18,5 +18,6 @@ public class ReservationsUserDto {
 
     private LocalDate date;
 
+    //todo reikia dar vieno fieldo ar dar aktyvi (ar dar data nepraejo)
 
 }

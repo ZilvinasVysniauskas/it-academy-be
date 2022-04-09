@@ -28,7 +28,7 @@ public class UserService {
         return UserMapper.userToUserAdminDto(userRepository.getById(id));
     }
 
-    public void addOrEditUser(UserRequest userRequest) {
+    public void editUser(UserRequest userRequest) {
         this.userRepository.save(UserMapper.userRequestToUser(userRequest));
     }
 }

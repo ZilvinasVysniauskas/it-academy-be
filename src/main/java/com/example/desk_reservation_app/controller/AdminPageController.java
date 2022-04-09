@@ -21,10 +21,15 @@ public class AdminPageController {
         this.userService = userService;
     }
 
-    @PostMapping("/user")
-    public void AddOrEditUser(@RequestBody UserRequest userRequest) {
-        this.userService.addOrEditUser(userRequest);
+    @PutMapping("/user")
+    public void editUser(@RequestBody UserRequest userRequest) {
+        this.userService.editUser(userRequest);
     }
+
+    @PostMapping("/user")
+    //todo Sandra: check if in DB user exists, if exists - return string already exists, else save new user
+    //su servisais ir mapperiais requestais request body etc
+
 
     @GetMapping("/reservations")
     @CrossOrigin

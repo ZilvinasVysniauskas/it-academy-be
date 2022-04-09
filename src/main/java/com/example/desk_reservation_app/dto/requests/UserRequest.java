@@ -1,12 +1,16 @@
 package com.example.desk_reservation_app.dto.requests;
 
 import com.example.desk_reservation_app.models.enums.Role;
+import com.sun.istack.NotNull;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Required;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+
 @Data
 public class UserRequest {
-    //TODO validations
+
     private Long userId;
 
     private String firstName;
@@ -24,5 +28,7 @@ public class UserRequest {
     private String email;
 
     private Role role;
+
+    //Validations for UserRequest (separate validators class)
 
 }

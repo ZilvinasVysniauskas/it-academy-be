@@ -22,4 +22,8 @@ public class UserPageController {
         return deskReservationService.getUserReservations(id);
     }
 
+    @GetMapping("reservations/cancel/{id}")
+    //todo Zymante: delete reservation by id
+    public void toDoFunction () {}
+
 }
