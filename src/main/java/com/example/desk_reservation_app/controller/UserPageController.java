@@ -16,10 +16,10 @@ public class UserPageController {
         this.deskReservationService = deskReservationService;
     }
 
-    @GetMapping("/reservations")
+    @GetMapping("/reservations/{id}")
     @CrossOrigin
-    public List<ReservationsUserDto> getRoomsWithDesks(){
-        return deskReservationService.getUserReservations();
+    public List<ReservationsUserDto> getRoomsWithDesks(@PathVariable Long id){
+        return deskReservationService.getUserReservations(id);
     }
 
 }

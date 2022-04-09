@@ -17,6 +17,7 @@ public class ReservationsMapper {
     public static DeskDto DeskToDeskToDto(Desk desk) {
         return DeskDto.builder()
                 .id(desk.getId())
+                .deskNumber(desk.getDeskNumber())
                 .isAvailable(desk.is_available())
                 .build();
     }
@@ -25,7 +26,7 @@ public class ReservationsMapper {
         return RoomDto.builder()
                 .roomId(room.getId())
                 .roomName(room.getRoomName())
-                .deskDtoList(room.getDesks().stream()
+                .desks(room.getDesks().stream()
                         .map(ReservationsMapper::DeskToDeskToDto)
                         .collect(Collectors.toList()))
                 .build();

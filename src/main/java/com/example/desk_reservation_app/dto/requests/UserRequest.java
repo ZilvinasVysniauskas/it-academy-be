@@ -2,6 +2,7 @@ package com.example.desk_reservation_app.dto.requests;
 
 import com.example.desk_reservation_app.models.enums.Role;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Required;
 
 @Data
 public class UserRequest {

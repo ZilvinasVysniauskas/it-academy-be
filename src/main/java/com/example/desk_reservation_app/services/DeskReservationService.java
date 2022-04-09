@@ -46,16 +46,16 @@ public class DeskReservationService {
             int deskId = Math.toIntExact(res.getDesk().getId());
             roomDtoList.stream()
                     .filter(a -> a.getRoomId() == roomId)
-                    .findFirst().get().getDeskDtoList().stream()
+                    .findFirst().get().getDesks().stream()
                     .filter(d -> d.getId() == deskId)
                     .findFirst().get().reserveTable(res.getUser().getFirstName(), res.getUser().getLastName());
         });
         return roomDtoList;
     }
 
-    public List<ReservationsUserDto> getUserReservations() {
+    public List<ReservationsUserDto> getUserReservations(Long id) {
         //todo hardcoded userId
-        return this.reservationsRepository.findReservationsByUserUserId(12345678L)
+        return this.reservationsRepository.findReservationsByUserUserId(id)
                 .stream().map(ReservationsMapper::ReservationToReservationUserDto)
                 .collect(Collectors.toList());
     }
@@ -69,7 +69,7 @@ public class DeskReservationService {
     public void reserveTableOrUpdateReservation(ReservationRequest reservationRequest) {
         //todo unable multiple reservations per day
         Desk desk = this.deskRepository.getById(reservationRequest.getDeskId());
-        User user = this.userRepository.getById(12345678L);
+        User user = this.userRepository.getById(reservationRequest.getUserId());
         this.reservationsRepository.save(ReservationsMapper.reservationRequestToReservation(reservationRequest, desk, user));
     }
 
