@@ -45,7 +45,8 @@ public class ASDController {
     public List<Floor> getAllFloors() {
         Floor floor = floorRepository.findAll().get(0);
         floor.getBuilding().getAddress();
-        }
+        return floorRepository.findAll();
+    }
 
     @GetMapping("/reservations")
     @CrossOrigin
