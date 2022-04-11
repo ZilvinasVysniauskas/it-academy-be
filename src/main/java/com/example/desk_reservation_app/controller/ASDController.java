@@ -1,9 +1,7 @@
 package com.example.desk_reservation_app.controller;
 
-import com.example.desk_reservation_app.dto.api.admin.ReservationsAdminDto;
 import com.example.desk_reservation_app.models.*;
 import com.example.desk_reservation_app.repositories.*;
-import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,7 +48,7 @@ public class ASDController {
 
     @GetMapping("/reservations")
     @CrossOrigin
-    public List<Reservations> getAllReservations() {
+    public List<Reservation> getAllReservations() {
         return reservationsRepository.findAll();
     }
 
@@ -68,7 +66,7 @@ public class ASDController {
 
     @GetMapping("/reservations/{id}")
     @CrossOrigin
-    public Reservations getAllReservations(@RequestParam Long id) {
+    public Reservation getAllReservations(@RequestParam Long id) {
         return reservationsRepository.findById(id).get();
     }
 

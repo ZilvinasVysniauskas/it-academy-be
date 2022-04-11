@@ -1,5 +1,6 @@
 package com.example.desk_reservation_app.models;
 
+import com.example.desk_reservation_app.models.enums.ReservationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Reservations {
+public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,4 +26,6 @@ public class Reservations {
     private User user;
 
     private LocalDate date;
+
+    private ReservationStatus reservationStatus = null;
 }

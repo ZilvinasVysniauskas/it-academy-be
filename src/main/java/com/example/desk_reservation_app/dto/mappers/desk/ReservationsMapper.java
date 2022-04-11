@@ -6,10 +6,11 @@ import com.example.desk_reservation_app.dto.api.desks.ReservationsUserDto;
 import com.example.desk_reservation_app.dto.api.desks.RoomDto;
 import com.example.desk_reservation_app.dto.requests.ReservationRequest;
 import com.example.desk_reservation_app.models.Desk;
-import com.example.desk_reservation_app.models.Reservations;
+import com.example.desk_reservation_app.models.Reservation;
 import com.example.desk_reservation_app.models.Room;
 import com.example.desk_reservation_app.models.User;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ReservationsMapper {
@@ -32,7 +33,7 @@ public class ReservationsMapper {
                 .build();
     }
 
-    public static ReservationsUserDto ReservationToReservationUserDto(Reservations reservations) {
+    public static ReservationsUserDto ReservationToReservationUserDto(Reservation reservations) {
         return ReservationsUserDto.builder()
                 .reservationId(reservations.getId())
                 .deskNumber(reservations.getDesk().getDeskNumber())
@@ -41,7 +42,11 @@ public class ReservationsMapper {
                 .build();
     }
 
-    public static ReservationsAdminDto ReservationToReservationAdminDto(Reservations reservations) {
+    public static Optional<ReservationsUserDto> ReservationOptionalToOptionalDto(Optional<Reservation> reservations) {
+        return reservations.map(ReservationsMapper::ReservationToReservationUserDto);
+    }
+
+    public static ReservationsAdminDto ReservationToReservationAdminDto(Reservation reservations) {
         return ReservationsAdminDto.builder()
                 .reservationId(reservations.getId())
                 .userEmail(reservations.getUser().getEmail())
@@ -54,8 +59,8 @@ public class ReservationsMapper {
                 .build();
     }
 
-    public static Reservations reservationRequestToReservation(ReservationRequest reservationRequest, Desk desk, User user) {
-        return Reservations.builder()
+    public static Reservation reservationRequestToReservation(ReservationRequest reservationRequest, Desk desk, User user) {
+        return Reservation.builder()
                 .date(reservationRequest.getDate())
                 .id(reservationRequest.getId())
                 .desk(desk)

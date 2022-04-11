@@ -44,6 +44,9 @@ public class AdminPageController {
 
     @GetMapping("/users")
     public List<UserAdminDto> getAllUsers() {
+        if (true) {
+            throw new RuntimeException();
+        }
         return userService.getAllUsers();
     }
 

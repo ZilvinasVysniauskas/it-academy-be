@@ -7,16 +7,21 @@ import com.example.desk_reservation_app.dto.api.desks.RoomDto;
 import com.example.desk_reservation_app.dto.requests.ReservationRequest;
 import com.example.desk_reservation_app.models.Desk;
 import com.example.desk_reservation_app.models.Floor;
-import com.example.desk_reservation_app.models.Reservations;
+import com.example.desk_reservation_app.models.Reservation;
 import com.example.desk_reservation_app.models.User;
+import com.example.desk_reservation_app.models.enums.ReservationStatus;
 import com.example.desk_reservation_app.repositories.DeskRepository;
 import com.example.desk_reservation_app.repositories.FloorRepository;
 import com.example.desk_reservation_app.repositories.ReservationsRepository;
 import com.example.desk_reservation_app.repositories.UserRepository;
+import org.springframework.data.jpa.domain.AbstractPersistable;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.metamodel.SingularAttribute;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,7 +46,7 @@ public class DeskReservationService {
         List<RoomDto> roomDtoList = floor.getRooms().stream()
                 .map(ReservationsMapper::RoomToRoomDto).collect(Collectors.toList());
 
-        List<Reservations> reservations = reservationsRepository.findAllByDate(date);
+        List<Reservation> reservations = reservationsRepository.findReservationsByDateAndReservationStatusIsNull(date);
         reservations.forEach(res -> {
             int roomId = Math.toIntExact(res.getDesk().getRoom().getId());
             int deskId = Math.toIntExact(res.getDesk().getId());
@@ -77,4 +82,14 @@ public class DeskReservationService {
     }
 
 
+    public ReservationsUserDto getUserReservationByDate(LocalDate date, Long userId) {
+        Optional<Reservation> optionalReservations = this.reservationsRepository.findReservationsByDateAndUserUserIdAndReservationStatusIsNull(date, userId);
+        return optionalReservations.map(ReservationsMapper::ReservationToReservationUserDto).orElse(null);
+    }
+
+    public void cancelReservation(Long id) {
+        Reservation reservation = this.reservationsRepository.findById(id).get();
+        reservation.setReservationStatus(ReservationStatus.CANCELED);
+        this.reservationsRepository.save(reservation);
+    }
 }
