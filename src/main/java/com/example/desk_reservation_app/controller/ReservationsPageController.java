@@ -26,6 +26,7 @@ public class ReservationsPageController {
     }
 
     @PostMapping
+    @CrossOrigin
     public void reserveTableOrUpdateReservation(@RequestBody ReservationRequest reservationRequest){
         deskReservationService.reserveTableOrUpdateReservation(reservationRequest);
     }
