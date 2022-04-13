@@ -20,10 +20,10 @@ public class UserAdminDto {
 
     private String lastName;
 
-    private String password;
-
     private boolean isActive;
 
     private String email;
+
+    private Role role;
 
 }

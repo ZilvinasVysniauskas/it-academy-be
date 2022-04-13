@@ -21,14 +21,10 @@ public class UserRequest {
 
     private String password;
 
-    private String passwordRepeat;
-
     private int isActive;
 
     private String email;
 
     private Role role;
-
-    //Validations for UserRequest (separate validators class)
 
 }

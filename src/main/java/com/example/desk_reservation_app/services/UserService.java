@@ -3,10 +3,12 @@ package com.example.desk_reservation_app.services;
 import com.example.desk_reservation_app.dto.api.user.UserAdminDto;
 import com.example.desk_reservation_app.dto.mappers.user.UserMapper;
 import com.example.desk_reservation_app.dto.requests.UserRequest;
+import com.example.desk_reservation_app.models.User;
 import com.example.desk_reservation_app.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,5 +32,13 @@ public class UserService {
 
     public void editUser(UserRequest userRequest) {
         this.userRepository.save(UserMapper.userRequestToUser(userRequest));
+    }
+
+    public void addUser(UserRequest userRequest) {
+        Optional<User> optionalUser = this.userRepository.findById(userRequest.getUserId());
+        if (optionalUser.isPresent()) {
+            throw new RuntimeException("user already exists");
+        }
+        userRepository.save(UserMapper.userRequestToUser(userRequest));
     }
 }

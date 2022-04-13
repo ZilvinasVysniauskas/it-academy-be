@@ -23,12 +23,14 @@ public class AdminPageController {
 
     @PutMapping("/user")
     public void editUser(@RequestBody UserRequest userRequest) {
+        System.out.println(userRequest);
         this.userService.editUser(userRequest);
     }
 
     @PostMapping("/user")
-    //todo Sandra: check if in DB user exists, if exists - return string already exists, else save new user
-    //su servisais ir mapperiais requestais request body etc
+    public void addUser(@RequestBody UserRequest userRequest) {
+        this.userService.addUser(userRequest);
+    }
 
 
     @GetMapping("/reservations")
@@ -37,16 +39,13 @@ public class AdminPageController {
         return deskReservationService.getAllReservationsForAdmin();
     }
 
-    @GetMapping( "/users/{id}")
+    @GetMapping( "/user/{id}")
     public UserAdminDto getUserById(@PathVariable Long id) {
         return this.userService.getUserById(id);
     }
 
-    @GetMapping("/users")
+    @GetMapping("/user")
     public List<UserAdminDto> getAllUsers() {
-        if (true) {
-            throw new RuntimeException();
-        }
         return userService.getAllUsers();
     }
 

@@ -19,6 +19,8 @@ public class ReservationsUserDto {
 
     private LocalDate date;
 
+    private Long deskId;
+
     //todo reikia dar vieno fieldo ar dar aktyvi (ar dar data nepraejo)
 
 }
