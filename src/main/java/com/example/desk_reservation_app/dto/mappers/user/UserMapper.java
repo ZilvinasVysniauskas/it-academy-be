@@ -1,6 +1,6 @@
 package com.example.desk_reservation_app.dto.mappers.user;
 
-import com.example.desk_reservation_app.dto.api.user.UserAdminDto;
+import com.example.desk_reservation_app.dto.api.admin.UserAdminDto;
 import com.example.desk_reservation_app.dto.requests.UserRequest;
 import com.example.desk_reservation_app.models.User;
 
@@ -15,6 +15,7 @@ public class UserMapper {
                 .middleName(user.getMiddleName())
                 .userId(user.getUserId())
                 .role(user.getRole())
+                .password(user.getPassword())
                 .build();
     }
 
@@ -27,7 +28,6 @@ public class UserMapper {
                 .firstName(userRequest.getFirstName())
                 .lastName(userRequest.getLastName())
                 .middleName(userRequest.getMiddleName())
-                //todo hash password
                 .password(userRequest.getPassword())
                 .role(userRequest.getRole())
                 .build();

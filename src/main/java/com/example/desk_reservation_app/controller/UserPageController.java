@@ -1,8 +1,9 @@
 package com.example.desk_reservation_app.controller;
-
-import com.example.desk_reservation_app.dto.api.desks.ReservationsUserDto;
+import com.example.desk_reservation_app.dto.api.admin.ReservationsDto;
 import com.example.desk_reservation_app.services.DeskReservationService;
+import com.example.desk_reservation_app.services.UserService;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 
@@ -16,14 +17,14 @@ public class UserPageController {
         this.deskReservationService = deskReservationService;
     }
 
-    @GetMapping("/reservations/{id}")
+    @GetMapping("reservations/{id}")
     @CrossOrigin
-    public List<ReservationsUserDto> getRoomsWithDesks(@PathVariable Long id){
-        return deskReservationService.getUserReservations(id);
+    public List<ReservationsDto> getAllUserReservations(@PathVariable Long id) {
+        return deskReservationService.getAllReservationsByUserId(id);
     }
 
-    @GetMapping("reservations/cancel/{id}")
-    //todo Zymante: delete reservation by id
-    public void toDoFunction () {}
-
+    @DeleteMapping("reservations/{id}")
+    public void cancelReservationUserPage(@PathVariable Long id) {
+        deskReservationService.cancelReservation(id);
+    }
 }

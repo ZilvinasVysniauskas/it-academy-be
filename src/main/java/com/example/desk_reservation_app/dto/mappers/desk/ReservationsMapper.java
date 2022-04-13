@@ -1,16 +1,13 @@
 package com.example.desk_reservation_app.dto.mappers.desk;
 
-import com.example.desk_reservation_app.dto.api.admin.ReservationsAdminDto;
+import com.example.desk_reservation_app.dto.api.admin.ReservationsDto;
 import com.example.desk_reservation_app.dto.api.desks.DeskDto;
-import com.example.desk_reservation_app.dto.api.desks.ReservationsUserDto;
 import com.example.desk_reservation_app.dto.api.desks.RoomDto;
 import com.example.desk_reservation_app.dto.requests.ReservationRequest;
 import com.example.desk_reservation_app.models.Desk;
 import com.example.desk_reservation_app.models.Reservation;
 import com.example.desk_reservation_app.models.Room;
 import com.example.desk_reservation_app.models.User;
-
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ReservationsMapper {
@@ -33,30 +30,15 @@ public class ReservationsMapper {
                 .build();
     }
 
-    public static ReservationsUserDto ReservationToReservationUserDto(Reservation reservations) {
-        return ReservationsUserDto.builder()
+    public static ReservationsDto ReservationToReservationDto(Reservation reservations) {
+        return ReservationsDto.builder()
                 .reservationId(reservations.getId())
-                .deskNumber(reservations.getDesk().getDeskNumber())
-                .roomName(reservations.getDesk().getRoom().getRoomName())
-                .date(reservations.getDate())
-                .deskId(reservations.getDesk().getId())
-                .build();
-    }
-
-    public static Optional<ReservationsUserDto> ReservationOptionalToOptionalDto(Optional<Reservation> reservations) {
-        return reservations.map(ReservationsMapper::ReservationToReservationUserDto);
-    }
-
-    public static ReservationsAdminDto ReservationToReservationAdminDto(Reservation reservations) {
-        return ReservationsAdminDto.builder()
-                .reservationId(reservations.getId())
-                .userEmail(reservations.getUser().getEmail())
                 .date(reservations.getDate())
                 .deskNumber(reservations.getDesk().getDeskNumber())
-                .userLastName(reservations.getUser().getLastName())
-                .userName(reservations.getUser().getFirstName())
-                .userId(reservations.getUser().getUserId())
                 .roomName(reservations.getDesk().getRoom().getRoomName())
+                .buildingName(reservations.getDesk().getRoom().getFloor().getBuilding().getName())
+                .reservationStatus(reservations.getReservationStatus())
+                .floorNumber(reservations.getDesk().getRoom().getFloor().getFloorNumber())
                 .build();
     }
 
@@ -68,4 +50,5 @@ public class ReservationsMapper {
                 .user(user)
                 .build();
     }
+
 }

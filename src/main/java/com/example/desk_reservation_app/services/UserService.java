@@ -1,6 +1,6 @@
 package com.example.desk_reservation_app.services;
 
-import com.example.desk_reservation_app.dto.api.user.UserAdminDto;
+import com.example.desk_reservation_app.dto.api.admin.UserAdminDto;
 import com.example.desk_reservation_app.dto.mappers.user.UserMapper;
 import com.example.desk_reservation_app.dto.requests.UserRequest;
 import com.example.desk_reservation_app.models.User;
@@ -41,4 +41,6 @@ public class UserService {
         }
         userRepository.save(UserMapper.userRequestToUser(userRequest));
     }
+
+
 }

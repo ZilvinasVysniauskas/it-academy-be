@@ -1,4 +1,4 @@
-package com.example.desk_reservation_app.dto.api.user;
+package com.example.desk_reservation_app.dto.api.admin;
 
 import com.example.desk_reservation_app.models.enums.Role;
 import lombok.AllArgsConstructor;
@@ -23,6 +23,8 @@ public class UserAdminDto {
     private boolean isActive;
 
     private String email;
+
+    private String password;
 
     private Role role;
 
