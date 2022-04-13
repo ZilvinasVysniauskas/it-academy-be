@@ -39,6 +39,7 @@ public class ReservationsMapper {
                 .buildingName(reservations.getDesk().getRoom().getFloor().getBuilding().getName())
                 .reservationStatus(reservations.getReservationStatus())
                 .floorNumber(reservations.getDesk().getRoom().getFloor().getFloorNumber())
+                .deskId(reservations.getDesk().getId())
                 .build();
     }
 
