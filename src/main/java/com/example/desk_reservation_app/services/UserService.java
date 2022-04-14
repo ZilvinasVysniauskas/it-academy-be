@@ -31,7 +31,13 @@ public class UserService {
     }
 
     public void editUser(UserRequest userRequest) {
-        this.userRepository.save(UserMapper.userRequestToUser(userRequest, passwordEncoder));
+        String password;
+        if (userRequest.getPassword() == null) {
+            password = userRepository.getById(userRequest.getUserId()).getPassword();
+        } else {
+            password = this.passwordEncoder.encode(userRequest.getPassword());
+        }
+        this.userRepository.save(UserMapper.userRequestToUser(userRequest, password));
     }
 
     public void addUser(UserRequest userRequest) {
@@ -39,7 +45,7 @@ public class UserService {
         if (optionalUser.isPresent()) {
             throw new RuntimeException("user already exists");
         }
-        userRepository.save(UserMapper.userRequestToUser(userRequest, passwordEncoder));
+        userRepository.save(UserMapper.userRequestToUser(userRequest, this.passwordEncoder.encode(userRequest.getPassword())));
     }
 
     public boolean checkIfUserIdExists(Long userId) {
@@ -47,7 +53,7 @@ public class UserService {
         return user.isPresent();
     }
 
-    public boolean checkIfEmailExists(String  email) {
+    public boolean checkIfEmailExists(String email) {
         Optional<User> user = userRepository.findByEmail(email);
         return user.isPresent();
     }

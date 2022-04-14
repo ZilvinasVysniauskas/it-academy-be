@@ -25,7 +25,6 @@ public class UserRequest {
     @Size(max = 40)
     private String lastName;
 
-    @NotEmpty
     private String password;
 
     @NotNull

@@ -61,7 +61,6 @@ public class ReservationsService {
     public void placeReservation(ReservationRequest reservationRequest, String auth) {
         Desk desk = this.deskRepository.getById(reservationRequest.getDeskId());
         User user = this.userRepository.getById(this.jwtUtil.getSubject(auth));
-        System.out.println(user);
         this.reservationsRepository.save(ReservationsMapper.reservationRequestToReservation(reservationRequest, desk, user));
     }
 
