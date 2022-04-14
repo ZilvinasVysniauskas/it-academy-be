@@ -35,4 +35,13 @@ public class AdminEditUserPageController {
         this.userService.addUser(userRequest);
     }
 
+    @GetMapping("/user/id/{userId}")
+    public boolean checkIfUserIdExists(@PathVariable Long userId) {
+        return userService.checkIfUserIdExists(userId);
+    }
+
+    @GetMapping("/user/email/{email}")
+    public boolean checkIfUserIdExists(@PathVariable String  email) {
+        return userService.checkIfEmailExists(email);
+    }
 }

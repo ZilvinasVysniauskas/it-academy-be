@@ -26,10 +26,6 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public UserAdminDto getUserById(Long id) {
-        return UserMapper.userToUserAdminDto(userRepository.getById(id));
-    }
-
     public void editUser(UserRequest userRequest) {
         this.userRepository.save(UserMapper.userRequestToUser(userRequest));
     }
@@ -42,5 +38,13 @@ public class UserService {
         userRepository.save(UserMapper.userRequestToUser(userRequest));
     }
 
+    public boolean checkIfUserIdExists(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        return user.isPresent();
+    }
 
+    public boolean checkIfEmailExists(String  email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        return user.isPresent();
+    }
 }
