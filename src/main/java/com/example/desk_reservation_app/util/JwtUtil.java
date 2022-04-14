@@ -32,7 +32,8 @@ public class JwtUtil {
     }
 
     public Long getSubject(String token) {
-        return Long.parseLong(Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody().getSubject());
+        String[] tokenSplit = token.split(" ");
+        return Long.parseLong(Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(tokenSplit[1]).getBody().getSubject());
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {

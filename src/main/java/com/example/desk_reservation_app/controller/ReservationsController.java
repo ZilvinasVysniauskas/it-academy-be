@@ -3,9 +3,6 @@ package com.example.desk_reservation_app.controller;
 import com.example.desk_reservation_app.dto.api.admin.ReservationsDto;
 import com.example.desk_reservation_app.dto.requests.ReservationRequest;
 import com.example.desk_reservation_app.services.ReservationsService;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,15 +19,15 @@ public class ReservationsController {
         this.reservationsService = reservationsService;
     }
 
-    @GetMapping("/{date}/{userId}")
-    public ResponseEntity<ReservationsDto> getReservationOnGivenDateTEST(@PathVariable String date, @PathVariable Long userId) {
-       return reservationsService.getUserReservationByDate(LocalDate.parse(date), userId);
+    @GetMapping("/{date}")
+    public ResponseEntity<ReservationsDto> getReservationOnGivenDateTEST(@PathVariable String date, @RequestHeader("Authorization") String auth) {
+       return reservationsService.getUserReservationByDate(LocalDate.parse(date), auth);
     }
 
 
-    @GetMapping("/{userId}")
-    public List<ReservationsDto> getReservationOnGivenDate(@PathVariable Long userId) {
-        return reservationsService.getAllReservationsByUserId(userId);
+    @GetMapping()
+    public List<ReservationsDto> getAllUserReservations(@RequestHeader("Authorization") String auth) {
+        return reservationsService.getAllReservationsByUserId(auth);
     }
 
     @DeleteMapping("/{id}")
@@ -39,7 +36,7 @@ public class ReservationsController {
     }
 
     @PostMapping
-    public void placeReservation(@RequestBody ReservationRequest reservationRequest) {
-        reservationsService.placeReservation(reservationRequest);
+    public void placeReservation(@RequestHeader("Authorization") String auth, @RequestBody ReservationRequest reservationRequest) {
+        reservationsService.placeReservation(reservationRequest, auth);
     }
 }
