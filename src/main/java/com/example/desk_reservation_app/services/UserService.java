@@ -2,12 +2,10 @@ package com.example.desk_reservation_app.services;
 
 import com.example.desk_reservation_app.dto.api.admin.UserDto;
 import com.example.desk_reservation_app.dto.mappers.user.UserMapper;
-import com.example.desk_reservation_app.dto.requests.UserLoginRequest;
 import com.example.desk_reservation_app.dto.requests.UserRequest;
 import com.example.desk_reservation_app.models.User;
 import com.example.desk_reservation_app.repositories.UserRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +15,12 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
+    private final PasswordEncoder passwordEncoder;
+
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository) {
+        this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
     }
 
@@ -30,7 +31,7 @@ public class UserService {
     }
 
     public void editUser(UserRequest userRequest) {
-        this.userRepository.save(UserMapper.userRequestToUser(userRequest));
+        this.userRepository.save(UserMapper.userRequestToUser(userRequest, passwordEncoder));
     }
 
     public void addUser(UserRequest userRequest) {
@@ -38,7 +39,7 @@ public class UserService {
         if (optionalUser.isPresent()) {
             throw new RuntimeException("user already exists");
         }
-        userRepository.save(UserMapper.userRequestToUser(userRequest));
+        userRepository.save(UserMapper.userRequestToUser(userRequest, passwordEncoder));
     }
 
     public boolean checkIfUserIdExists(Long userId) {
@@ -51,13 +52,5 @@ public class UserService {
         return user.isPresent();
     }
 
-    public ResponseEntity<UserDto> userLogin(UserLoginRequest loginRequest) {
-        Optional<User> user = userRepository.findById(loginRequest.getUserId());
-        if (user.isPresent()) {
-            if (loginRequest.getPassword().equals(user.get().getPassword())) {
-                return new ResponseEntity<>(UserMapper.userToUserDto(user.get()), HttpStatus.OK);
-            }
-        }
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-    }
+
 }

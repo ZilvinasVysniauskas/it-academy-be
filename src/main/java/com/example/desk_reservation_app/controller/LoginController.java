@@ -1,30 +1,26 @@
 package com.example.desk_reservation_app.controller;
 
 
-import com.example.desk_reservation_app.dto.api.admin.UserDto;
-import com.example.desk_reservation_app.dto.requests.UserLoginRequest;
-import com.example.desk_reservation_app.services.UserService;
-import org.springframework.http.ResponseEntity;
+import com.example.desk_reservation_app.dto.api.jwt.JwtRequest;
+import com.example.desk_reservation_app.dto.api.jwt.JwtResponse;
+import com.example.desk_reservation_app.services.JwtService;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
-import java.util.Base64;
 
 @RestController
 @RequestMapping("api/v1/login")
 public class LoginController {
 
-    private final UserService userService;
+    private final JwtService jwtService;
 
-    public LoginController(UserService userService) {
-        this.userService = userService;
+    public LoginController(JwtService jwtService) {
+        this.jwtService = jwtService;
     }
 
 
     @PostMapping()
-    public ResponseEntity<UserDto> login(@RequestBody UserLoginRequest loginRequest) {
-        return userService.userLogin(loginRequest);
+    public JwtResponse login(@RequestBody JwtRequest jwtRequest) throws Exception {
+        System.out.println(jwtService.createJwtToken(jwtRequest));
+        return jwtService.createJwtToken(jwtRequest);
     }
 
 //    @GetMapping()

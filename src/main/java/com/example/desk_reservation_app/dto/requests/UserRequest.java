@@ -8,8 +8,6 @@ import javax.validation.constraints.*;
 public class UserRequest {
 
     @NotNull
-    @Min(10000000)
-    @Max(99999999)
     private Long userId;
 
     @NotNull

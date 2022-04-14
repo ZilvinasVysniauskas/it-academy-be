@@ -3,6 +3,7 @@ package com.example.desk_reservation_app.dto.mappers.user;
 import com.example.desk_reservation_app.dto.api.admin.UserDto;
 import com.example.desk_reservation_app.dto.requests.UserRequest;
 import com.example.desk_reservation_app.models.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class UserMapper {
 
@@ -19,7 +20,7 @@ public class UserMapper {
                 .build();
     }
 
-    public static User userRequestToUser(UserRequest userRequest) {
+    public static User userRequestToUser(UserRequest userRequest, PasswordEncoder passwordEncoder) {
         boolean[] booleans = new boolean[]{false, true};
         return User.builder()
                 .userId(userRequest.getUserId())
@@ -28,7 +29,7 @@ public class UserMapper {
                 .firstName(userRequest.getFirstName())
                 .lastName(userRequest.getLastName())
                 .middleName(userRequest.getMiddleName())
-                .password(userRequest.getPassword())
+                .password(passwordEncoder.encode(userRequest.getPassword()))
                 .role(userRequest.getRole())
                 .build();
     }
