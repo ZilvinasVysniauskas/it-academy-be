@@ -3,8 +3,10 @@ package com.example.desk_reservation_app.controller;
 import com.example.desk_reservation_app.dto.api.admin.UserAdminDto;
 import com.example.desk_reservation_app.dto.requests.UserRequest;
 import com.example.desk_reservation_app.services.UserService;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -23,13 +25,13 @@ public class AdminEditUserPageController {
     }
 
     @PutMapping("/user")
-    public void editUser(@RequestBody UserRequest userRequest) {
+    public void editUser(@Valid @RequestBody UserRequest userRequest) {
         System.out.println(userRequest);
         this.userService.editUser(userRequest);
     }
 
     @PostMapping("/user")
-    public void addUser(@RequestBody UserRequest userRequest) {
+    public void addUser(@Valid @RequestBody UserRequest userRequest) {
         this.userService.addUser(userRequest);
     }
 
