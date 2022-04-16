@@ -14,18 +14,16 @@ public class ReservationsPageController {
 
     private final DeskReservationService deskReservationService;
 
+
+
+
+
+
+
+
+
     public ReservationsPageController(DeskReservationService deskReservationService) {
         this.deskReservationService = deskReservationService;
-    }
-
-    @GetMapping("/{date}")
-    public List<RoomDto> getReservations(@PathVariable String date) {
-        return deskReservationService.getTablesByDate(LocalDate.parse(date));
-    }
-
-    @GetMapping("/{date}/{userId}")
-    public ReservationsDto getReservationOnGivenDate(@PathVariable String date, @PathVariable Long userId) {
-        return deskReservationService.getUserReservationByDate(LocalDate.parse(date), userId);
     }
 
     @DeleteMapping("/{id}")

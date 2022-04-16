@@ -35,22 +35,6 @@ public class DeskReservationService {
         this.userRepository = userRepository;
     }
 
-    public List<RoomDto> getTablesByDate(LocalDate date) {
-        Floor floor = floorRepository.findById(1L).get();
-        List<RoomDto> roomDtoList = floor.getRooms().stream()
-                .map(ReservationsMapper::RoomToRoomDto).collect(Collectors.toList());
-        List<Reservation> reservations = reservationsRepository.findReservationsByDateAndReservationStatusIsNull(date);
-        reservations.forEach(res -> {
-            int roomId = Math.toIntExact(res.getDesk().getRoom().getId());
-            int deskId = Math.toIntExact(res.getDesk().getId());
-            roomDtoList.stream()
-                    .filter(a -> a.getRoomId() == roomId)
-                    .findFirst().get().getDesks().stream()
-                    .filter(d -> d.getId() == deskId)
-                    .findFirst().get().reserveTable(res.getUser().getFirstName(), res.getUser().getLastName());
-        });
-        return roomDtoList;
-    }
 
     public void reserveTableOrUpdateReservation(ReservationRequest reservationRequest) {
         Desk desk = this.deskRepository.getById(reservationRequest.getDeskId());
