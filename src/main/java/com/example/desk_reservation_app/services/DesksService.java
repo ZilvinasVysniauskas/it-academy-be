@@ -32,6 +32,11 @@ public class DesksService {
         Floor floor = floorRepository.findById(1L).get();
         List<RoomDto> roomDtoList = floor.getRooms().stream()
                 .map(ReservationsMapper::RoomToRoomDto).collect(Collectors.toList());
+        roomDtoList.forEach(a-> a.setDesks(
+                deskRepository.findDeskByRoomIdAndRemovedIsFalse(a.getRoomId()).stream()
+                        .map(ReservationsMapper::DeskToDeskToDto)
+                        .collect(Collectors.toList())
+        ));
         List<Reservation> reservations = reservationsRepository.findReservationsByDateAndReservationStatusIsNull(date);
         reservations.forEach(res -> {
             int roomId = Math.toIntExact(res.getDesk().getRoom().getId());
@@ -46,5 +51,7 @@ public class DesksService {
     }
 
 
-
+    public void deleteDeskById(Long id) {
+        this.deskRepository.deleteById(id);
+    }
 }

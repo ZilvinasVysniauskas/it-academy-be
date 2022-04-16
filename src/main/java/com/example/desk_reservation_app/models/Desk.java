@@ -26,6 +26,8 @@ public class Desk {
     @JoinColumn(name = "room_id", referencedColumnName = "id")
     private Room room;
 
+    private boolean isRemoved = false;
+
     public Desk(int deskNumber) {
         this.deskNumber = deskNumber;
     }

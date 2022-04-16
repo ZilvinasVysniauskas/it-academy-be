@@ -23,4 +23,9 @@ public class DesksController {
     public List<RoomDto> getReservations(@PathVariable String date) {
         return desksService.getTablesByDate(LocalDate.parse(date));
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteDeskById(@PathVariable Long id) {
+        this.desksService.deleteDeskById(id);
+    }
 }

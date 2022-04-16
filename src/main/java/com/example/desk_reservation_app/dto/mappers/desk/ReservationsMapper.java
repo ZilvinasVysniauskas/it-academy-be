@@ -8,6 +8,8 @@ import com.example.desk_reservation_app.models.Desk;
 import com.example.desk_reservation_app.models.Reservation;
 import com.example.desk_reservation_app.models.Room;
 import com.example.desk_reservation_app.models.User;
+
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ReservationsMapper {
@@ -24,9 +26,7 @@ public class ReservationsMapper {
         return RoomDto.builder()
                 .roomId(room.getId())
                 .roomName(room.getRoomName())
-                .desks(room.getDesks().stream()
-                        .map(ReservationsMapper::DeskToDeskToDto)
-                        .collect(Collectors.toList()))
+                .desks(List.of())
                 .build();
     }
 
