@@ -22,10 +22,6 @@ public class ReservationsController {
         this.reservationsService = reservationsService;
     }
 
-//    @GetMapping("/{date}/{userId}")
-//    public ReservationsDto getReservationOnGivenDate(@PathVariable String date, @PathVariable Long userId) {
-//        return reservationsService.getUserReservationByDate(LocalDate.parse(date), userId);
-//    }
     @GetMapping("/{date}/{userId}")
     public ResponseEntity<ReservationsDto> getReservationOnGivenDateTEST(@PathVariable String date, @PathVariable Long userId) {
        return reservationsService.getUserReservationByDate(LocalDate.parse(date), userId);

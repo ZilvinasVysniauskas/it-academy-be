@@ -1,7 +1,7 @@
 package com.example.desk_reservation_app.controller;
 
 
-import com.example.desk_reservation_app.dto.api.admin.UserAdminDto;
+import com.example.desk_reservation_app.dto.api.admin.UserDto;
 import com.example.desk_reservation_app.dto.requests.UserRequest;
 import com.example.desk_reservation_app.services.UserService;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ public class UsersController {
     }
 
     @GetMapping
-    public List<UserAdminDto> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         return userService.getAllUsers();
     }
 

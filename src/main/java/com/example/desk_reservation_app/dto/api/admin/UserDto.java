@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class UserAdminDto {
+public class UserDto {
 
     private Long userId;
 

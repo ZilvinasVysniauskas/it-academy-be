@@ -1,10 +1,13 @@
 package com.example.desk_reservation_app.services;
 
-import com.example.desk_reservation_app.dto.api.admin.UserAdminDto;
+import com.example.desk_reservation_app.dto.api.admin.UserDto;
 import com.example.desk_reservation_app.dto.mappers.user.UserMapper;
+import com.example.desk_reservation_app.dto.requests.UserLoginRequest;
 import com.example.desk_reservation_app.dto.requests.UserRequest;
 import com.example.desk_reservation_app.models.User;
 import com.example.desk_reservation_app.repositories.UserRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,9 +23,9 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<UserAdminDto> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         return userRepository.findAll().stream()
-                .map(UserMapper::userToUserAdminDto)
+                .map(UserMapper::userToUserDto)
                 .collect(Collectors.toList());
     }
 
@@ -46,5 +49,15 @@ public class UserService {
     public boolean checkIfEmailExists(String  email) {
         Optional<User> user = userRepository.findByEmail(email);
         return user.isPresent();
+    }
+
+    public ResponseEntity<UserDto> userLogin(UserLoginRequest loginRequest) {
+        Optional<User> user = userRepository.findById(loginRequest.getUserId());
+        if (user.isPresent()) {
+            if (loginRequest.getPassword().equals(user.get().getPassword())) {
+                return new ResponseEntity<>(UserMapper.userToUserDto(user.get()), HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 }

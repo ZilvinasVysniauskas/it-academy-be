@@ -1,13 +1,13 @@
 package com.example.desk_reservation_app.dto.mappers.user;
 
-import com.example.desk_reservation_app.dto.api.admin.UserAdminDto;
+import com.example.desk_reservation_app.dto.api.admin.UserDto;
 import com.example.desk_reservation_app.dto.requests.UserRequest;
 import com.example.desk_reservation_app.models.User;
 
 public class UserMapper {
 
-    public static UserAdminDto userToUserAdminDto(User user) {
-        return UserAdminDto.builder()
+    public static UserDto userToUserDto(User user) {
+        return UserDto.builder()
                 .email(user.getEmail())
                 .firstName(user.getFirstName())
                 .isActive(user.isActive())

@@ -23,7 +23,4 @@ public class DesksController {
     public List<RoomDto> getReservations(@PathVariable String date) {
         return desksService.getTablesByDate(LocalDate.parse(date));
     }
-
-
-
 }
