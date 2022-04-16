@@ -24,9 +24,6 @@ public class DesksController {
         return desksService.getTablesByDate(LocalDate.parse(date));
     }
 
-    @GetMapping("/{date}/{userId}")
-    public ReservationsDto getReservationOnGivenDate(@PathVariable String date, @PathVariable Long userId) {
-        return desksService.getUserReservationByDate(LocalDate.parse(date), userId);
-    }
+
 
 }
