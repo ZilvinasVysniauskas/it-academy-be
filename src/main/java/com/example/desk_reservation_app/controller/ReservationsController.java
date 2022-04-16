@@ -3,6 +3,10 @@ package com.example.desk_reservation_app.controller;
 import com.example.desk_reservation_app.dto.api.admin.ReservationsDto;
 import com.example.desk_reservation_app.dto.requests.ReservationRequest;
 import com.example.desk_reservation_app.services.ReservationsService;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -18,16 +22,16 @@ public class ReservationsController {
         this.reservationsService = reservationsService;
     }
 
+//    @GetMapping("/{date}/{userId}")
+//    public ReservationsDto getReservationOnGivenDate(@PathVariable String date, @PathVariable Long userId) {
+//        return reservationsService.getUserReservationByDate(LocalDate.parse(date), userId);
+//    }
     @GetMapping("/{date}/{userId}")
-    public ReservationsDto getReservationOnGivenDate(@PathVariable String date, @PathVariable Long userId) {
-        return reservationsService.getUserReservationByDate(LocalDate.parse(date), userId);
+    public ResponseEntity<ReservationsDto> getReservationOnGivenDateTEST(@PathVariable String date, @PathVariable Long userId) {
+       return reservationsService.getUserReservationByDate(LocalDate.parse(date), userId);
     }
 
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Returns the updated credit agreement application", content = @Content(schema = @Schema(implementation = Void.class))),
-            @ApiResponse(responseCode = "400", content = @Content(schema = @Schema(implementation = ApiErrorBadRequest.class))),
-            @ApiResponse(responseCode = "500", content = @Content(schema = @Schema(implementation = ApiError.class)))
-    })
+
     @GetMapping("/{userId}")
     public List<ReservationsDto> getReservationOnGivenDate(@PathVariable Long userId) {
         return reservationsService.getAllReservationsByUserId(userId);

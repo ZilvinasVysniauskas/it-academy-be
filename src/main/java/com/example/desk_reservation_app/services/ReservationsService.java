@@ -10,6 +10,8 @@ import com.example.desk_reservation_app.models.enums.ReservationStatus;
 import com.example.desk_reservation_app.repositories.DeskRepository;
 import com.example.desk_reservation_app.repositories.ReservationsRepository;
 import com.example.desk_reservation_app.repositories.UserRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
@@ -32,10 +34,10 @@ public class ReservationsService {
         this.userRepository = userRepository;
     }
 
-
-    public ReservationsDto getUserReservationByDate(LocalDate date, Long userId) {
+    public ResponseEntity<ReservationsDto> getUserReservationByDate(LocalDate date, Long userId) {
         Optional<Reservation> optionalReservations = this.reservationsRepository.findReservationsByDateAndUserUserIdAndReservationStatusIsNull(date, userId);
-        return optionalReservations.map(ReservationsMapper::ReservationToReservationDto).orElse(null);
+        return optionalReservations.map(reservation -> new ResponseEntity<>(ReservationsMapper.ReservationToReservationDto(reservation), HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
     }
 
     public List<ReservationsDto> getAllReservationsByUserId(Long id) {

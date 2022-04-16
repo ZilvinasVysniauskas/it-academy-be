@@ -26,7 +26,6 @@ public class UsersController {
 
     @PutMapping()
     public void editUser(@Valid @RequestBody UserRequest userRequest) {
-        System.out.println(userRequest);
         this.userService.editUser(userRequest);
     }
 
@@ -34,7 +33,6 @@ public class UsersController {
     public void addUser(@Valid @RequestBody UserRequest userRequest) {
         this.userService.addUser(userRequest);
     }
-
 
     //TODO change validations logic
     @GetMapping("/id/{userId}")
