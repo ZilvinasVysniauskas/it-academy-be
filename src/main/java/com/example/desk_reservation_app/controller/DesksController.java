@@ -25,7 +25,7 @@ public class DesksController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteDeskById(@PathVariable Long id) {
-        this.desksService.deleteDeskById(id);
+    public void deleteDeskById(@PathVariable String id) {
+        this.desksService.deleteDeskById(Long.parseLong(id));
     }
 }
