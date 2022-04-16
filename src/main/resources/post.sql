@@ -10,8 +10,8 @@ INSERT INTO public.room (id, room_name, floor_id) VALUES (3, 'Room Nr3', 1);
 INSERT INTO public.room (id, room_name, floor_id) VALUES (4, 'Room Nr4', 1);
 INSERT INTO public.room (id, room_name, floor_id) VALUES (5, 'Room Nr5', 1);
 
-INSERT INTO public.desk (id, desk_number, is_available, room_id) VALUES (2, 1, true, 1);
-INSERT INTO public.desk (id, desk_number, is_available, room_id) VALUES (3, 2, true, 1);
+
+INSERT INTO public.desk ( desk_number, is_available, room_id) VALUES ( 2, true, 1);
 INSERT INTO public.desk (id, desk_number, is_available, room_id) VALUES (4, 3, true, 1);
 INSERT INTO public.desk (id, desk_number, is_available, room_id) VALUES (5, 4, true, 1);
 INSERT INTO public.desk (id, desk_number, is_available, room_id) VALUES (6, 1, true, 2);
