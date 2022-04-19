@@ -11,10 +11,10 @@ public class ReservationRequest {
     //todo do validations
     private Long id = null;
 
+    private Long userId;
+
     private Long deskId;
 
     private LocalDate date;
 
-
 }
-

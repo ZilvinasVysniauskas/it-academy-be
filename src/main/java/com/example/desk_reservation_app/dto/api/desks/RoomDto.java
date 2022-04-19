@@ -12,5 +12,5 @@ public class  RoomDto {
 
     private String roomName;
 
-    private List<DeskDto> deskDtoList;
+    private List<DeskDto> desks;
 }

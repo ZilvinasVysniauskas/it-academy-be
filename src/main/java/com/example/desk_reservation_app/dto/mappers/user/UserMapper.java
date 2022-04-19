@@ -1,24 +1,24 @@
 package com.example.desk_reservation_app.dto.mappers.user;
 
-import com.example.desk_reservation_app.dto.api.user.UserAdminDto;
+import com.example.desk_reservation_app.dto.api.admin.UserDto;
 import com.example.desk_reservation_app.dto.requests.UserRequest;
 import com.example.desk_reservation_app.models.User;
 
 public class UserMapper {
 
-    public static UserAdminDto userToUserAdminDto(User user) {
-        return UserAdminDto.builder()
+    public static UserDto userToUserDto(User user) {
+        return UserDto.builder()
                 .email(user.getEmail())
                 .firstName(user.getFirstName())
                 .isActive(user.isActive())
                 .lastName(user.getLastName())
                 .middleName(user.getMiddleName())
                 .userId(user.getUserId())
-                .password(user.getPassword())
+                .role(user.getRole())
                 .build();
     }
 
-    public static User userRequestToUser(UserRequest userRequest) {
+    public static User userRequestToUser(UserRequest userRequest, String password) {
         boolean[] booleans = new boolean[]{false, true};
         return User.builder()
                 .userId(userRequest.getUserId())
@@ -27,8 +27,7 @@ public class UserMapper {
                 .firstName(userRequest.getFirstName())
                 .lastName(userRequest.getLastName())
                 .middleName(userRequest.getMiddleName())
-                //todo hash password
-                .password(userRequest.getPassword())
+                .password(password)
                 .role(userRequest.getRole())
                 .build();
     }

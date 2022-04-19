@@ -1,4 +1,4 @@
-package com.example.desk_reservation_app.dto.api.user;
+package com.example.desk_reservation_app.dto.api.admin;
 
 import com.example.desk_reservation_app.models.enums.Role;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class UserAdminDto {
+public class UserDto {
 
     private Long userId;
 
@@ -20,10 +20,12 @@ public class UserAdminDto {
 
     private String lastName;
 
-    private String password;
-
     private boolean isActive;
 
     private String email;
+
+    private String password;
+
+    private Role role;
 
 }
