@@ -2,8 +2,10 @@ package com.example.desk_reservation_app.services;
 
 import com.example.desk_reservation_app.dto.api.desks.RoomDto;
 import com.example.desk_reservation_app.dto.mappers.desk.ReservationsMapper;
+import com.example.desk_reservation_app.models.Desk;
 import com.example.desk_reservation_app.models.Floor;
 import com.example.desk_reservation_app.models.Reservation;
+import com.example.desk_reservation_app.models.enums.ReservationStatus;
 import com.example.desk_reservation_app.repositories.DeskRepository;
 import com.example.desk_reservation_app.repositories.FloorRepository;
 import com.example.desk_reservation_app.repositories.ReservationsRepository;
@@ -11,6 +13,7 @@ import com.example.desk_reservation_app.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +36,7 @@ public class DesksService {
         List<RoomDto> roomDtoList = floor.getRooms().stream()
                 .map(ReservationsMapper::RoomToRoomDto).collect(Collectors.toList());
         roomDtoList.forEach(a-> a.setDesks(
-                deskRepository.findDeskByRoomIdAndRemovedIsFalse(a.getRoomId()).stream()
+                deskRepository.findDeskByRoomIdAndDeskDeletedFalse(a.getRoomId()).stream()
                         .map(ReservationsMapper::DeskToDeskToDto)
                         .collect(Collectors.toList())
         ));
@@ -50,8 +53,16 @@ public class DesksService {
         return roomDtoList;
     }
 
-
     public void deleteDeskById(Long id) {
-        this.deskRepository.deleteById(id);
+        LocalDate date = LocalDate.now();
+        List<Reservation> reservationsToCancel = this.reservationsRepository.findReservationsByDeskIdAndDateGreaterThanEqual(id, date);
+        reservationsToCancel.forEach(reservation -> {
+            reservation.setReservationStatus(ReservationStatus.CANCELED);
+            reservationsRepository.save(reservation);
+        });
+        Desk desk = deskRepository.getById(id);
+        desk.setDeskDeleted(true);
+        deskRepository.save(desk);
     }
 }
+
