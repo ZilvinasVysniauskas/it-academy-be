@@ -3,6 +3,7 @@ package com.example.desk_reservation_app.controller;
 import com.example.desk_reservation_app.dto.api.admin.ReservationsDto;
 import com.example.desk_reservation_app.dto.requests.ReservationRequest;
 import com.example.desk_reservation_app.services.ReservationsService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

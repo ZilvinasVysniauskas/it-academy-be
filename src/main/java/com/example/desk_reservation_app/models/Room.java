@@ -20,6 +20,8 @@ public class Room {
 
     private String roomName;
 
+    private boolean roomDeleted = false;
+
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "room")
     @ToString.Exclude

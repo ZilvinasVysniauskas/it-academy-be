@@ -3,11 +3,12 @@ package com.example.desk_reservation_app.dto.mappers.desk;
 import com.example.desk_reservation_app.dto.api.admin.ReservationsDto;
 import com.example.desk_reservation_app.dto.api.desks.DeskDto;
 import com.example.desk_reservation_app.dto.api.desks.RoomDto;
+import com.example.desk_reservation_app.dto.requests.DeskRequest;
 import com.example.desk_reservation_app.dto.requests.ReservationRequest;
-import com.example.desk_reservation_app.models.Desk;
-import com.example.desk_reservation_app.models.Reservation;
-import com.example.desk_reservation_app.models.Room;
-import com.example.desk_reservation_app.models.User;
+import com.example.desk_reservation_app.dto.requests.RoomRequest;
+import com.example.desk_reservation_app.models.*;
+
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ReservationsMapper {
@@ -15,8 +16,16 @@ public class ReservationsMapper {
     public static DeskDto DeskToDeskToDto(Desk desk) {
         return DeskDto.builder()
                 .id(desk.getId())
-                .deskNumber(desk.getDeskNumber())
+                .deskName(desk.getDeskName())
                 .isAvailable(desk.is_available())
+                .build();
+    }
+
+    public static Desk DeskRequestToDesk(DeskRequest deskRequest, Room room) {
+        return Desk.builder()
+                .deskName(deskRequest.getDeskName())
+                .room(room)
+                .is_available(deskRequest.isAvailable())
                 .build();
     }
 
@@ -24,9 +33,7 @@ public class ReservationsMapper {
         return RoomDto.builder()
                 .roomId(room.getId())
                 .roomName(room.getRoomName())
-                .desks(room.getDesks().stream()
-                        .map(ReservationsMapper::DeskToDeskToDto)
-                        .collect(Collectors.toList()))
+                .desks(List.of())
                 .build();
     }
 
@@ -34,7 +41,7 @@ public class ReservationsMapper {
         return ReservationsDto.builder()
                 .reservationId(reservations.getId())
                 .date(reservations.getDate())
-                .deskNumber(reservations.getDesk().getDeskNumber())
+                .deskName(reservations.getDesk().getDeskName())
                 .roomName(reservations.getDesk().getRoom().getRoomName())
                 .buildingName(reservations.getDesk().getRoom().getFloor().getBuilding().getName())
                 .reservationStatus(reservations.getReservationStatus())
@@ -52,4 +59,11 @@ public class ReservationsMapper {
                 .build();
     }
 
+    public static Room RoomRequestToRoom(RoomRequest roomRequest, Floor floor) {
+        return Room.builder()
+                .id(roomRequest.getId())
+                .roomName(roomRequest.getRoomName())
+                .floor(floor)
+                .build();
+    }
 }

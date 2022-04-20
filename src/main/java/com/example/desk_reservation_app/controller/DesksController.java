@@ -1,8 +1,7 @@
 package com.example.desk_reservation_app.controller;
 
-import com.example.desk_reservation_app.dto.api.admin.ReservationsDto;
 import com.example.desk_reservation_app.dto.api.desks.RoomDto;
-import com.example.desk_reservation_app.dto.requests.ReservationRequest;
+import com.example.desk_reservation_app.dto.requests.DeskRequest;
 import com.example.desk_reservation_app.services.DesksService;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +18,28 @@ public class DesksController {
         this.desksService = desksService;
     }
 
+    @GetMapping()
+    public List<RoomDto> getAllDesks() {
+        return desksService.getAllRoomsByFloor();
+    }
+
     @GetMapping("/{date}")
     public List<RoomDto> getReservations(@PathVariable String date) {
-        return desksService.getTablesByDate(LocalDate.parse(date));
+        return desksService.getAllDesksWithReservationsByDate(LocalDate.parse(date));
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteDeskById(@PathVariable String id) {
+        desksService.deleteDeskById(Long.parseLong(id));
+    }
+
+    @PostMapping()
+    public void addDesk(@RequestBody DeskRequest deskRequest) {
+        desksService.addNewDesk(deskRequest);
+    }
+    @PutMapping()
+    public void editDesk(@RequestBody DeskRequest deskRequest) {
+        desksService.editDesk(deskRequest);
+    }
+
 }

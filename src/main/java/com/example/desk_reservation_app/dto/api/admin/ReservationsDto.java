@@ -18,7 +18,7 @@ public class ReservationsDto {
 
     private int floorNumber;
 
-    private int deskNumber;
+    private String  deskName;
 
     private Long deskId;
 
