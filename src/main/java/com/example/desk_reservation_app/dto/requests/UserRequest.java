@@ -15,8 +15,6 @@ public class UserRequest {
     @Size(max = 40)
     private String firstName;
 
-    @NotNull
-    @NotEmpty
     @Size(max = 40)
     private String middleName;
 
