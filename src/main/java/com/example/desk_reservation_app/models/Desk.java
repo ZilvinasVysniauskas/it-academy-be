@@ -2,15 +2,15 @@ package com.example.desk_reservation_app.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Data
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Desk {
 
     @Id
@@ -27,7 +27,6 @@ public class Desk {
     private Room room;
 
     private boolean deskDeleted = false;
-
 
     public Desk(int deskNumber) {
         this.deskNumber = deskNumber;
