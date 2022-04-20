@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class DeskDto {
     private Long id;
-    private int deskNumber;
+    private String  deskName;
     private boolean isAvailable;
     private ReservationInfo info = null;
 

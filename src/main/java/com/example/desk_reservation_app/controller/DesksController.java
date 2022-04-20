@@ -37,4 +37,9 @@ public class DesksController {
     public void addDesk(@RequestBody DeskRequest deskRequest) {
         desksService.addNewDesk(deskRequest);
     }
+    @PutMapping()
+    public void editDesk(@RequestBody DeskRequest deskRequest) {
+        desksService.editDesk(deskRequest);
+    }
+
 }

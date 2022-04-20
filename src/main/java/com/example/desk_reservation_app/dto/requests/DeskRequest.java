@@ -5,9 +5,11 @@ import lombok.Data;
 @Data
 public class DeskRequest {
 
-    private Long roomId;
+    private Long id = null;
 
-    private int deskNumber;
+    private Long roomId = null;
+
+    private String  deskName;
 
     private boolean isAvailable = true;
 

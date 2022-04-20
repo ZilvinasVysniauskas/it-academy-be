@@ -93,8 +93,15 @@ public class DesksService {
     }
 
     public void editRoom(RoomRequest roomRequest) {
-        Floor floor = floorRepository.getById(roomRequest.getFloorId());
-        this.roomRepository.save(ReservationsMapper.RoomRequestToRoom(roomRequest, floor));
+        Room room = this.roomRepository.getById(roomRequest.getId());
+        room.setRoomName(roomRequest.getRoomName());
+        this.roomRepository.save(room);
+    }
+
+    public void editDesk(DeskRequest deskRequest) {
+        Desk desk = this.deskRepository.getById(deskRequest.getId());
+        desk.setDeskName(deskRequest.getDeskName());
+        this.deskRepository.save(desk);
     }
 }
 

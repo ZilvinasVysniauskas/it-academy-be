@@ -16,14 +16,14 @@ public class ReservationsMapper {
     public static DeskDto DeskToDeskToDto(Desk desk) {
         return DeskDto.builder()
                 .id(desk.getId())
-                .deskNumber(desk.getDeskNumber())
+                .deskName(desk.getDeskName())
                 .isAvailable(desk.is_available())
                 .build();
     }
 
     public static Desk DeskRequestToDesk(DeskRequest deskRequest, Room room) {
         return Desk.builder()
-                .deskNumber(deskRequest.getDeskNumber())
+                .deskName(deskRequest.getDeskName())
                 .room(room)
                 .is_available(deskRequest.isAvailable())
                 .build();
@@ -41,7 +41,7 @@ public class ReservationsMapper {
         return ReservationsDto.builder()
                 .reservationId(reservations.getId())
                 .date(reservations.getDate())
-                .deskNumber(reservations.getDesk().getDeskNumber())
+                .deskName(reservations.getDesk().getDeskName())
                 .roomName(reservations.getDesk().getRoom().getRoomName())
                 .buildingName(reservations.getDesk().getRoom().getFloor().getBuilding().getName())
                 .reservationStatus(reservations.getReservationStatus())

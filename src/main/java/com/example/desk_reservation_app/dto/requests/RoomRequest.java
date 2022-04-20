@@ -9,5 +9,5 @@ public class RoomRequest {
 
     private String roomName;
 
-    private Long floorId;
+    private Long floorId = null;
 }

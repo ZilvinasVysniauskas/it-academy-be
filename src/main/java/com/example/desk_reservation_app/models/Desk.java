@@ -19,7 +19,7 @@ public class Desk {
 
     private boolean is_available = true;
 
-    private int deskNumber;
+    private String  deskName;
 
     @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL)
@@ -27,13 +27,4 @@ public class Desk {
     private Room room;
 
     private boolean deskDeleted = false;
-
-    public Desk(int deskNumber) {
-        this.deskNumber = deskNumber;
-    }
-
-    public Desk(int deskNumber, Room room) {
-        this.deskNumber = deskNumber;
-        this.room = room;
-    }
 }
