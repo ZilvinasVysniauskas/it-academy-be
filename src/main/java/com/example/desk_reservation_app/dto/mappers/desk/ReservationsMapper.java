@@ -1,15 +1,16 @@
 package com.example.desk_reservation_app.dto.mappers.desk;
 
 import com.example.desk_reservation_app.dto.api.admin.ReservationsDto;
-import com.example.desk_reservation_app.dto.api.desks.DeskDto;
-import com.example.desk_reservation_app.dto.api.desks.RoomDto;
+import com.example.desk_reservation_app.dto.api.places.DeskDto;
+import com.example.desk_reservation_app.dto.api.places.RoomDto;
 import com.example.desk_reservation_app.dto.requests.DeskRequest;
 import com.example.desk_reservation_app.dto.requests.ReservationRequest;
 import com.example.desk_reservation_app.dto.requests.RoomRequest;
 import com.example.desk_reservation_app.models.*;
+import com.example.desk_reservation_app.repositories.FloorRepository;
+import com.example.desk_reservation_app.repositories.RoomRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ReservationsMapper {
 
@@ -21,10 +22,10 @@ public class ReservationsMapper {
                 .build();
     }
 
-    public static Desk DeskRequestToDesk(DeskRequest deskRequest, Room room) {
+    public static Desk DeskRequestToDesk(DeskRequest deskRequest, RoomRepository roomRepository) {
         return Desk.builder()
                 .deskName(deskRequest.getDeskName())
-                .room(room)
+                .room(roomRepository.getById(deskRequest.getRoomId()))
                 .is_available(deskRequest.isAvailable())
                 .build();
     }
@@ -59,11 +60,11 @@ public class ReservationsMapper {
                 .build();
     }
 
-    public static Room RoomRequestToRoom(RoomRequest roomRequest, Floor floor) {
+    public static Room RoomRequestToRoom(RoomRequest roomRequest, FloorRepository floorRepository) {
         return Room.builder()
                 .id(roomRequest.getId())
                 .roomName(roomRequest.getRoomName())
-                .floor(floor)
+                .floor(floorRepository.getById(roomRequest.getFloorId()))
                 .build();
     }
 }

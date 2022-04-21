@@ -1,8 +1,9 @@
 package com.example.desk_reservation_app.controller;
 
-import com.example.desk_reservation_app.dto.api.desks.RoomDto;
+import com.example.desk_reservation_app.dto.api.places.RoomDto;
 import com.example.desk_reservation_app.dto.requests.DeskRequest;
 import com.example.desk_reservation_app.services.DesksService;
+import com.example.desk_reservation_app.services.ReservationsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -13,24 +14,26 @@ import java.util.List;
 public class DesksController {
 
     private final DesksService desksService;
+    private final ReservationsService reservationsService;
 
-    public DesksController(DesksService desksService) {
+    public DesksController(DesksService desksService, ReservationsService reservationsService) {
         this.desksService = desksService;
+        this.reservationsService = reservationsService;
     }
 
-    @GetMapping()
-    public List<RoomDto> getAllDesks() {
-        return desksService.getAllRoomsByFloor();
+    @GetMapping("/{floorId}")
+    public List<RoomDto> getAllDesks(@PathVariable Long floorId) {
+        return desksService.getAllRoomsByFloor(floorId);
     }
 
-    @GetMapping("/{date}")
-    public List<RoomDto> getReservations(@PathVariable String date) {
-        return desksService.getAllDesksWithReservationsByDate(LocalDate.parse(date));
+    @GetMapping("/{floorId}/{date}")
+    public List<RoomDto> getReservations(@PathVariable Long floorId, @PathVariable String date) {
+        return desksService.getAllDesksWithReservationsByDate(floorId, LocalDate.parse(date));
     }
 
     @DeleteMapping("/{id}")
     public void deleteDeskById(@PathVariable String id) {
-        desksService.deleteDeskById(Long.parseLong(id));
+        reservationsService.deleteDeskById(Long.parseLong(id));
     }
 
     @PostMapping()

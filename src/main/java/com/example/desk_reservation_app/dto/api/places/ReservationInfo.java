@@ -1,4 +1,4 @@
-package com.example.desk_reservation_app.dto.api.desks;
+package com.example.desk_reservation_app.dto.api.places;
 
 import lombok.Builder;
 import lombok.Data;

@@ -3,13 +3,9 @@ package com.example.desk_reservation_app.services;
 import com.example.desk_reservation_app.dto.api.admin.ReservationsDto;
 import com.example.desk_reservation_app.dto.mappers.desk.ReservationsMapper;
 import com.example.desk_reservation_app.dto.requests.ReservationRequest;
-import com.example.desk_reservation_app.models.Desk;
-import com.example.desk_reservation_app.models.Reservation;
-import com.example.desk_reservation_app.models.User;
+import com.example.desk_reservation_app.models.*;
 import com.example.desk_reservation_app.models.enums.ReservationStatus;
-import com.example.desk_reservation_app.repositories.DeskRepository;
-import com.example.desk_reservation_app.repositories.ReservationsRepository;
-import com.example.desk_reservation_app.repositories.UserRepository;
+import com.example.desk_reservation_app.repositories.*;
 import com.example.desk_reservation_app.util.JwtUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +23,18 @@ public class ReservationsService {
     private final ReservationsRepository reservationsRepository;
     private final DeskRepository deskRepository;
     private final UserRepository userRepository;
+    private final RoomRepository roomRepository;
+    private final FloorRepository floorRepository;
+    private final BuildingRepository buildingRepository;
     private final JwtUtil jwtUtil;
 
-    public ReservationsService(ReservationsRepository reservationsRepository, DeskRepository deskRepository, UserRepository userRepository, JwtUtil jwtUtil) {
+    public ReservationsService(ReservationsRepository reservationsRepository, DeskRepository deskRepository, UserRepository userRepository, RoomRepository roomRepository, FloorRepository floorRepository, BuildingRepository buildingRepository, JwtUtil jwtUtil) {
         this.reservationsRepository = reservationsRepository;
         this.deskRepository = deskRepository;
         this.userRepository = userRepository;
+        this.roomRepository = roomRepository;
+        this.floorRepository = floorRepository;
+        this.buildingRepository = buildingRepository;
         this.jwtUtil = jwtUtil;
     }
 
@@ -68,6 +70,46 @@ public class ReservationsService {
         Reservation reservation = this.reservationsRepository.findById(id).get();
         reservation.setReservationStatus(ReservationStatus.CANCELED);
         this.reservationsRepository.save(reservation);
+    }
+
+    public void deleteDeskById(Long id) {
+        LocalDate date = LocalDate.now();
+        this.reservationsRepository.findReservationsByDeskIdAndDateGreaterThanEqual(id, date)
+                .forEach(reservation -> this.cancelReservation(reservation.getId()));
+//        reservationsToCancel.forEach(reservation -> {
+//            reservation.setReservationStatus(ReservationStatus.CANCELED);
+//            reservationsRepository.save(reservation);
+//        });
+        Desk desk = deskRepository.getById(id);
+        desk.setDeskDeleted(true);
+        deskRepository.save(desk);
+    }
+
+    public void deleteRoom(Long id) {
+        Room room = roomRepository.getById(id);
+        List<Long> idsToDelete = new java.util.ArrayList<>(List.of());
+        room.getDesks().forEach(desk -> idsToDelete.add(desk.getId()));
+        idsToDelete.forEach(this::deleteDeskById);
+        room.setRoomDeleted(true);
+        roomRepository.save(room);
+    }
+
+    public void deleteFloorById(Long floorId) {
+        Floor floor = floorRepository.getById(floorId);
+        List<Long> idsToDelete = new java.util.ArrayList<>(List.of());
+        floor.getRooms().forEach(room -> idsToDelete.add(room.getId()));
+        idsToDelete.forEach(this::deleteRoom);
+        floor.setFloorDeleted(true);
+        floorRepository.save(floor);
+    }
+
+    public void deleteBuildingById(Long buildingId) {
+        Building building = buildingRepository.getById(buildingId);
+        List<Long> idsToDelete = new java.util.ArrayList<>(List.of());
+        building.getFloors().forEach(floor -> idsToDelete.add(floor.getId()));
+        idsToDelete.forEach(this::deleteFloorById);
+        building.setBuildingDeleted(true);
+        buildingRepository.save(building);
     }
 
 

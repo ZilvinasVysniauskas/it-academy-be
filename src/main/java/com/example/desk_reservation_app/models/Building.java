@@ -26,4 +26,6 @@ public class Building {
     private Address address;
 
     private String name;
+
+    private boolean buildingDeleted = false;
 }

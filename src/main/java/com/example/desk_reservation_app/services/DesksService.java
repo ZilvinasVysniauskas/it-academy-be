@@ -1,13 +1,10 @@
 package com.example.desk_reservation_app.services;
 
-import com.example.desk_reservation_app.dto.api.desks.RoomDto;
+import com.example.desk_reservation_app.dto.api.places.RoomDto;
 import com.example.desk_reservation_app.dto.mappers.desk.ReservationsMapper;
 import com.example.desk_reservation_app.dto.requests.DeskRequest;
 import com.example.desk_reservation_app.dto.requests.RoomRequest;
-import com.example.desk_reservation_app.models.Desk;
-import com.example.desk_reservation_app.models.Floor;
-import com.example.desk_reservation_app.models.Reservation;
-import com.example.desk_reservation_app.models.Room;
+import com.example.desk_reservation_app.models.*;
 import com.example.desk_reservation_app.models.enums.ReservationStatus;
 import com.example.desk_reservation_app.repositories.*;
 import org.springframework.stereotype.Service;
@@ -24,20 +21,22 @@ public class DesksService {
     private final RoomRepository roomRepository;
     private final ReservationsRepository reservationsRepository;
     private final DeskRepository deskRepository;
+    private final BuildingRepository buildingRepository;
 
-    public DesksService(FloorRepository floorRepository, ReservationsRepository reservationsRepository, DeskRepository deskRepository, UserRepository userRepository, RoomRepository roomRepository) {
+    public DesksService(FloorRepository floorRepository, ReservationsRepository reservationsRepository, DeskRepository deskRepository, UserRepository userRepository, RoomRepository roomRepository, BuildingRepository buildingRepository) {
         this.floorRepository = floorRepository;
         this.reservationsRepository = reservationsRepository;
         this.deskRepository = deskRepository;
         this.roomRepository = roomRepository;
+        this.buildingRepository = buildingRepository;
     }
 
-    public List<RoomDto> getAllDesksWithReservationsByDate(LocalDate date) {
-        return placeReservations(date, getAllRoomsByFloor());
+    public List<RoomDto> getAllDesksWithReservationsByDate(Long floorId, LocalDate date) {
+        return placeReservations(date, getAllRoomsByFloor(floorId));
     }
 
-    public List<RoomDto> getAllRoomsByFloor() {
-        List<Room> rooms = roomRepository.findAllByFloorIdAndRoomDeletedFalse(1L);
+    public List<RoomDto> getAllRoomsByFloor(Long floorId) {
+        List<Room> rooms = roomRepository.findAllByFloorIdAndRoomDeletedFalse(floorId);
         List<RoomDto> roomDtoList = rooms.stream()
                 .map(ReservationsMapper::RoomToRoomDto).collect(Collectors.toList());
         roomDtoList.forEach(a-> a.setDesks(
@@ -62,34 +61,16 @@ public class DesksService {
         return roomDtoList;
     }
 
-    public void deleteDeskById(Long id) {
-        LocalDate date = LocalDate.now();
-        List<Reservation> reservationsToCancel = this.reservationsRepository.findReservationsByDeskIdAndDateGreaterThanEqual(id, date);
-        reservationsToCancel.forEach(reservation -> {
-            reservation.setReservationStatus(ReservationStatus.CANCELED);
-            reservationsRepository.save(reservation);
-        });
-        Desk desk = deskRepository.getById(id);
-        desk.setDeskDeleted(true);
-        deskRepository.save(desk);
-    }
 
-    public void deleteRoom(Long id) {
-        Room room = roomRepository.getById(id);
-        List<Long> idsToDelete = new java.util.ArrayList<>(List.of());
-        room.getDesks().forEach(desk -> idsToDelete.add(desk.getId()));
-        idsToDelete.forEach(this::deleteDeskById);
-        room.setRoomDeleted(true);
-        roomRepository.save(room);
-    }
+
+
+
     public void addNewDesk(DeskRequest deskRequest) {
-        Room room = roomRepository.getById(deskRequest.getRoomId());
-        deskRepository.save(ReservationsMapper.DeskRequestToDesk(deskRequest, room));
+        deskRepository.save(ReservationsMapper.DeskRequestToDesk(deskRequest, roomRepository));
     }
 
     public void addNewRoom(RoomRequest roomRequest) {
-        Floor floor = floorRepository.getById(roomRequest.getFloorId());
-        this.roomRepository.save(ReservationsMapper.RoomRequestToRoom(roomRequest, floor));
+        this.roomRepository.save(ReservationsMapper.RoomRequestToRoom(roomRequest, floorRepository));
     }
 
     public void editRoom(RoomRequest roomRequest) {
@@ -103,5 +84,7 @@ public class DesksService {
         desk.setDeskName(deskRequest.getDeskName());
         this.deskRepository.save(desk);
     }
+
+
 }
 
