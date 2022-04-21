@@ -77,8 +77,8 @@ public class UserService {
                 this.userRepository.save(user);
                 return new ResponseEntity<>("password changed successfully", HttpStatus.OK);
             }
-            return new ResponseEntity<>("passwords does not match", HttpStatus.I_AM_A_TEAPOT);
+            return new ResponseEntity<>("passwords does not match", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("Wrong password", HttpStatus.I_AM_A_TEAPOT);
+        return new ResponseEntity<>("Wrong password", HttpStatus.BAD_GATEWAY);
     }
 }
