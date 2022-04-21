@@ -73,6 +73,9 @@ public class UserService {
         boolean currentPasswordMatch = passwordEncoder.matches(passwordChangeRequest.getCurrentPassword(), user.getPassword());
         if (currentPasswordMatch) {
             if (passwordChangeRequest.getNewPassword().equals(passwordChangeRequest.getNewPasswordRepeat())){
+                if (passwordChangeRequest.getNewPassword().equals(passwordChangeRequest.getCurrentPassword())){
+                    return new ResponseEntity<>("new password can not be the same as old password", HttpStatus.BAD_REQUEST);
+                }
                 user.setPassword(passwordEncoder.encode(passwordChangeRequest.getNewPassword()));
                 this.userRepository.save(user);
                 return new ResponseEntity<>("password changed successfully", HttpStatus.OK);
