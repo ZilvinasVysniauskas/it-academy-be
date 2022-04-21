@@ -5,6 +5,7 @@ import com.example.desk_reservation_app.dto.mappers.user.UserMapper;
 import com.example.desk_reservation_app.dto.requests.UserRequest;
 import com.example.desk_reservation_app.models.User;
 import com.example.desk_reservation_app.repositories.UserRepository;
+import com.example.desk_reservation_app.util.JwtUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +19,12 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
 
-    public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository) {
+    public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository, JwtUtil jwtUtil) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.jwtUtil = jwtUtil;
     }
 
     public List<UserDto> getAllUsers() {
@@ -58,5 +61,9 @@ public class UserService {
         return user.isPresent();
     }
 
-
+    public void changePassword(UserRequest userRequest, String auth) {
+        User user = this.userRepository.getById(this.jwtUtil.getSubject(auth));
+        user.setPassword(this.passwordEncoder.encode(userRequest.getPassword()));
+        userRepository.save(user);
+    }
 }

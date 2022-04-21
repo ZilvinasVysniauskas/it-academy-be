@@ -29,10 +29,17 @@ public class UsersController {
         this.userService.editUser(userRequest);
     }
 
+    @PutMapping("/password")
+    public void changePassword(@RequestBody UserRequest userRequest, @RequestHeader("Authorization") String auth) {
+        this.userService.changePassword(userRequest, auth);
+    }
+
     @PostMapping()
     public void addUser(@Valid @RequestBody UserRequest userRequest) {
         this.userService.addUser(userRequest);
     }
+
+
 
     //TODO change validations logic
     @GetMapping("/id/{userId}")
