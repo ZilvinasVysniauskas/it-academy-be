@@ -79,6 +79,6 @@ public class UserService {
             }
             return new ResponseEntity<>("passwords does not match", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("Wrong password", HttpStatus.BAD_GATEWAY);
+        return new ResponseEntity<>("Wrong password", HttpStatus.BAD_REQUEST);
     }
 }
