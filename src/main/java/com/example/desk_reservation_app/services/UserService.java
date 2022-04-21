@@ -2,10 +2,17 @@ package com.example.desk_reservation_app.services;
 
 import com.example.desk_reservation_app.dto.api.admin.UserDto;
 import com.example.desk_reservation_app.dto.mappers.user.UserMapper;
+import com.example.desk_reservation_app.dto.requests.PasswordChangeRequest;
 import com.example.desk_reservation_app.dto.requests.UserRequest;
 import com.example.desk_reservation_app.models.User;
 import com.example.desk_reservation_app.repositories.UserRepository;
 import com.example.desk_reservation_app.util.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -61,9 +68,17 @@ public class UserService {
         return user.isPresent();
     }
 
-    public void changePassword(UserRequest userRequest, String auth) {
+    public ResponseEntity<String> changePassword(PasswordChangeRequest passwordChangeRequest, String auth) {
         User user = this.userRepository.getById(this.jwtUtil.getSubject(auth));
-        user.setPassword(this.passwordEncoder.encode(userRequest.getPassword()));
-        userRepository.save(user);
+        boolean currentPasswordMatch = passwordEncoder.matches(passwordChangeRequest.getCurrentPassword(), user.getPassword());
+        if (currentPasswordMatch) {
+            if (passwordChangeRequest.getNewPassword().equals(passwordChangeRequest.getNewPasswordRepeat())){
+                user.setPassword(passwordEncoder.encode(passwordChangeRequest.getNewPassword()));
+                this.userRepository.save(user);
+                return new ResponseEntity<>("password changed successfully", HttpStatus.OK);
+            }
+            return new ResponseEntity<>("passwords does not match", HttpStatus.I_AM_A_TEAPOT);
+        }
+        return new ResponseEntity<>("Wrong password", HttpStatus.I_AM_A_TEAPOT);
     }
 }

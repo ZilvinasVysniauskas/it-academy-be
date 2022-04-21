@@ -19,7 +19,6 @@ public class LoginController {
 
     @PostMapping()
     public JwtResponse login(@RequestBody JwtRequest jwtRequest) throws Exception {
-        System.out.println(jwtService.createJwtToken(jwtRequest));
         return jwtService.createJwtToken(jwtRequest);
     }
 

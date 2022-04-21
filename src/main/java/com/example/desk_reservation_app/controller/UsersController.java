@@ -1,9 +1,12 @@
 package com.example.desk_reservation_app.controller;
 
 
+import com.example.desk_reservation_app.dto.api.admin.ReservationsDto;
 import com.example.desk_reservation_app.dto.api.admin.UserDto;
+import com.example.desk_reservation_app.dto.requests.PasswordChangeRequest;
 import com.example.desk_reservation_app.dto.requests.UserRequest;
 import com.example.desk_reservation_app.services.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -30,8 +33,8 @@ public class UsersController {
     }
 
     @PutMapping("/password")
-    public void changePassword(@RequestBody UserRequest userRequest, @RequestHeader("Authorization") String auth) {
-        this.userService.changePassword(userRequest, auth);
+    public ResponseEntity<String> changePassword(@RequestBody PasswordChangeRequest passwordChangeRequest, @RequestHeader("Authorization") String auth) {
+        return this.userService.changePassword(passwordChangeRequest, auth);
     }
 
     @PostMapping()
