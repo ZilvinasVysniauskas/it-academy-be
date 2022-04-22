@@ -14,6 +14,8 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(uniqueConstraints = { @UniqueConstraint(name = "UniqueReservationDate", columnNames = { "date", "desk_id" }),
+        @UniqueConstraint(name = "UniqueReservationsUser", columnNames = { "date", "user_user_id" })})
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
