@@ -138,6 +138,8 @@ public class ReservationsService {
         reservations.forEach(res -> {
             int roomId = Math.toIntExact(res.getDesk().getRoom().getId());
             int deskId = Math.toIntExact(res.getDesk().getId());
+            System.out.println(roomId);
+            System.out.println(deskId);
             roomDtoList.stream()
                     .filter(a -> a.getRoomId() == roomId)
                     .findFirst().get().getDesks().stream()
