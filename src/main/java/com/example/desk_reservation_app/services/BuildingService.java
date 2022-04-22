@@ -3,7 +3,9 @@ package com.example.desk_reservation_app.services;
 import com.example.desk_reservation_app.dto.api.places.BuildingDto;
 import com.example.desk_reservation_app.dto.mappers.BuildingMapper;
 import com.example.desk_reservation_app.dto.requests.BuildingRequest;
+import com.example.desk_reservation_app.dto.requests.FloorRequest;
 import com.example.desk_reservation_app.models.Building;
+import com.example.desk_reservation_app.models.Floor;
 import com.example.desk_reservation_app.repositories.AddressRepository;
 import com.example.desk_reservation_app.repositories.BuildingRepository;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,12 @@ public class BuildingService {
         Building building = BuildingMapper.BuildingRequestToBuilding(buildingRequest);
         System.out.println(building);
         this.addressRepository.save(building.getAddress());
+        this.buildingRepository.save(building);
+    }
+
+    public void editBuilding(BuildingRequest buildingRequest) {
+        Building building = this.buildingRepository.getById(buildingRequest.getId());
+        building.setName(buildingRequest.getName());
         this.buildingRepository.save(building);
     }
 }

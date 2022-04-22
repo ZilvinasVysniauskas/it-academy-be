@@ -41,9 +41,15 @@ public class FloorController {
         floorService.addNewFloor(floorRequest);
     }
 
+    @PutMapping()
+    public void editFloor(@RequestBody FloorRequest floorRequest) {
+        this.floorService.editFloor(floorRequest);
+    }
+
     @DeleteMapping("/{floorId}/{replaceFloorId}")
-    public void deleteFloor(@PathVariable Long floorId, Long replaceFloorId) {
+    public void deleteFloor(@PathVariable Long floorId, @PathVariable Long replaceFloorId) {
         this.reservationsService.deleteFloorById(floorId, replaceFloorId);
    }
+
 
 }

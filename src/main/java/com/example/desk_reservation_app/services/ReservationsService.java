@@ -105,6 +105,7 @@ public class ReservationsService {
     private void changeDefaultFloorsForUsers(Long floorId, Long replaceFloorId) {
         List<User> userList = this.userRepository.findAllByDefaultFloorId(floorId);
         userList.forEach(user -> user.setDefaultFloorId(replaceFloorId));
+        this.userRepository.saveAll(userList);
     }
 
     public void deleteBuildingById(Long buildingId) {

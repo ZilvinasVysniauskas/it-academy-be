@@ -3,6 +3,7 @@ package com.example.desk_reservation_app.services;
 import com.example.desk_reservation_app.dto.api.places.FloorDto;
 import com.example.desk_reservation_app.dto.mappers.FloorMapper;
 import com.example.desk_reservation_app.dto.requests.FloorRequest;
+import com.example.desk_reservation_app.models.Floor;
 import com.example.desk_reservation_app.repositories.BuildingRepository;
 import com.example.desk_reservation_app.repositories.FloorRepository;
 import org.springframework.stereotype.Service;
@@ -36,5 +37,11 @@ public class FloorService {
 
     public FloorDto getFirstFloor() {
         return FloorMapper.floorToFloorDto(this.floorRepository.findAll().get(0));
+    }
+
+    public void editFloor(FloorRequest floorRequest) {
+        Floor floor = this.floorRepository.getById(floorRequest.getId());
+        floor.setFloorName(floorRequest.getFloorName());
+        this.floorRepository.save(floor);
     }
 }

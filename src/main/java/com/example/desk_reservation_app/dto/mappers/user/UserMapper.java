@@ -29,6 +29,7 @@ public class UserMapper {
                 .lastName(userRequest.getLastName())
                 .middleName(userRequest.getMiddleName())
                 .role(userRequest.getRole())
+                .password(password)
                 .defaultFloorId(userRequest.getDefaultFloorId())
                 .build();
     }

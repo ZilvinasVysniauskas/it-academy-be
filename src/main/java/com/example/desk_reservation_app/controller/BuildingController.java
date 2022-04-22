@@ -33,6 +33,11 @@ public class BuildingController {
         buildingService.addNewBuilding(buildingRequest);
     }
 
+    @PutMapping()
+    public void editBuilding(@RequestBody BuildingRequest buildingRequest) {
+        this.buildingService.editBuilding(buildingRequest);
+    }
+
     @DeleteMapping("/{buildingId}")
     public void deleteBuilding(@PathVariable Long buildingId) {
         this.reservationsService.deleteBuildingById(buildingId);
