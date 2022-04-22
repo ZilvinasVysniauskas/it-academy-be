@@ -1,6 +1,7 @@
 package com.example.desk_reservation_app.services;
 
 import com.example.desk_reservation_app.dto.api.admin.ReservationsDto;
+import com.example.desk_reservation_app.dto.api.places.DeskDto;
 import com.example.desk_reservation_app.dto.api.places.RoomDto;
 import com.example.desk_reservation_app.dto.mappers.desk.ReservationsMapper;
 import com.example.desk_reservation_app.dto.requests.ReservationRequest;
@@ -39,7 +40,7 @@ public class ReservationsService {
         this.jwtUtil = jwtUtil;
     }
 
-    public ResponseEntity<ReservationsDto> getUserReservationByDate(LocalDate date, String  auth) {
+    public ResponseEntity<ReservationsDto> getUserReservationByDate(LocalDate date, String auth) {
         Optional<Reservation> optionalReservations = this.reservationsRepository.findReservationsByDateAndUserUserIdAndReservationStatusIsNull(date, this.jwtUtil.getSubject(auth));
         return optionalReservations.map(reservation -> new ResponseEntity<>(ReservationsMapper.ReservationToReservationDto(reservation), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
@@ -108,46 +109,31 @@ public class ReservationsService {
         this.userRepository.saveAll(userList);
     }
 
-    public void deleteBuildingById(Long buildingId) {
-//        Building building = buildingRepository.getById(buildingId);
-//        List<Long> idsToDelete = new java.util.ArrayList<>(List.of());
-//        building.getFloors().forEach(floor -> idsToDelete.add(floor.getId()));
-//        idsToDelete.forEach(this::deleteFloorById);
-//        building.setBuildingDeleted(true);
-//        buildingRepository.save(building);
-    }
-
     public List<RoomDto> getAllDesksWithReservationsByDate(Long floorId, LocalDate date) {
         return placeReservations(date, getAllRoomsByFloor(floorId));
     }
 
     public List<RoomDto> getAllRoomsByFloor(Long floorId) {
         List<Room> rooms = roomRepository.findAllByFloorIdAndRoomDeletedFalse(floorId);
-        List<RoomDto> roomDtoList = rooms.stream()
+        return rooms.stream()
                 .map(ReservationsMapper::RoomToRoomDto).collect(Collectors.toList());
-        roomDtoList.forEach(a-> a.setDesks(
-                deskRepository.findDeskByRoomIdAndDeskDeletedFalse(a.getRoomId()).stream()
-                        .map(ReservationsMapper::DeskToDeskToDto)
-                        .collect(Collectors.toList())
-        ));
-        return roomDtoList;
     }
 
     private List<RoomDto> placeReservations(LocalDate date, List<RoomDto> roomDtoList) {
-        List<Reservation> reservations = reservationsRepository.findReservationsByDateAndReservationStatusIsNull(date);
-        reservations.forEach(res -> {
-            int roomId = Math.toIntExact(res.getDesk().getRoom().getId());
-            int deskId = Math.toIntExact(res.getDesk().getId());
-            System.out.println(roomId);
-            System.out.println(deskId);
-            roomDtoList.stream()
-                    .filter(a -> a.getRoomId() == roomId)
-                    .findFirst().get().getDesks().stream()
-                    .filter(d -> d.getId() == deskId)
-                    .findFirst().get().reserveTable(res.getUser().getFirstName(), res.getUser().getLastName());
-        });
+
+        roomDtoList.forEach(roomDto -> {
+                    List<DeskDto> deskDtoList = new java.util.ArrayList<>(List.of());
+                    List<DeskDto> desksOfRoom = this.deskRepository.findDeskByRoomIdAndDeskDeletedFalse(roomDto.getRoomId())
+                            .stream().map(ReservationsMapper::DeskToDeskToDto).toList();
+                    desksOfRoom.forEach(desk -> {
+                        this.reservationsRepository.findReservationsByDateAndDeskIdAndReservationStatusIsNull(date, desk.getId())
+                                .ifPresent(reservation -> desk.reserveTable(reservation.getUser().getFirstName(), reservation.getUser().getLastName()));
+                        deskDtoList.add(desk);
+                    });
+                    roomDto.setDesks(deskDtoList);
+                }
+        );
         return roomDtoList;
     }
-
 
 }

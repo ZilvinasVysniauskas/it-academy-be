@@ -13,4 +13,6 @@ public class  RoomDto {
     private String roomName;
 
     private List<DeskDto> desks;
+
+
 }

@@ -40,6 +40,36 @@ public class InsertsController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @GetMapping("desks")
+    public void insertDesk() {
+        Faker faker = new Faker();
+        Random random = new Random();
+        int i = 0;
+        while (i < 500) {
+            String s2 = faker.name().firstName();
+            String s1 = faker.name().lastName();
+            String s = faker.name().firstName();
+            try {
+                userRepository.save(
+                        User.builder()
+                                .password(passwordEncoder.encode(stringPass()))
+                                .defaultFloorId(random.nextLong(1, 13))
+                                .role(Role.STANDARD_USER)
+                                .middleName(s2)
+                                .lastName(s1)
+                                .firstName(s)
+                                .email(s+ "." + s1 + "@corporate.com")
+                                .userId(random.nextLong(10000000, 99999999))
+                                .active(true)
+                                .build());
+            }catch (Exception e) {
+                System.out.println(e.getMessage());
+                System.out.println("ups");
+            }
+            i++;
+        }
+    }
+
     @GetMapping("users")
     public void dostuff1() {
         Faker faker = new Faker();
@@ -76,7 +106,7 @@ public class InsertsController {
             Random random = new Random();
             int max = random.nextInt(5, 50);
             for (int i = 0; i < max; i++){
-                Desk desk = deskRepository.getById(random.nextLong(0, 393));
+                Desk desk = deskRepository.getById(random.nextLong(0, 375));
                 try {
                     reservationsRepository.save(Reservation.builder()
                             .user(user)
@@ -91,8 +121,8 @@ public class InsertsController {
         });
     }
     private LocalDate randomDate() {
-        long minDay = LocalDate.of(2022, 1, 1).toEpochDay();
-        long maxDay = LocalDate.of(2022, 10, 20).toEpochDay();
+        long minDay = LocalDate.of(2022, 3, 1).toEpochDay();
+        long maxDay = LocalDate.of(2022, 6, 20).toEpochDay();
         long randomDay = ThreadLocalRandom.current().nextLong(minDay, maxDay);
         return LocalDate.ofEpochDay(randomDay);
     }
