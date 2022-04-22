@@ -20,6 +20,8 @@ public class Floor {
 
     private int floorNumber;
 
+    private String floorName;
+
     @JsonManagedReference
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "floor")
     @ToString.Exclude

@@ -23,12 +23,12 @@ public class DesksController {
 
     @GetMapping("/{floorId}")
     public List<RoomDto> getAllDesks(@PathVariable Long floorId) {
-        return desksService.getAllRoomsByFloor(floorId);
+        return reservationsService.getAllRoomsByFloor(floorId);
     }
 
     @GetMapping("/{floorId}/{date}")
     public List<RoomDto> getReservations(@PathVariable Long floorId, @PathVariable String date) {
-        return desksService.getAllDesksWithReservationsByDate(floorId, LocalDate.parse(date));
+        return reservationsService.getAllDesksWithReservationsByDate(floorId, LocalDate.parse(date));
     }
 
     @DeleteMapping("/{id}")

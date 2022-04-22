@@ -31,52 +31,9 @@ public class DesksService {
         this.buildingRepository = buildingRepository;
     }
 
-    public List<RoomDto> getAllDesksWithReservationsByDate(Long floorId, LocalDate date) {
-        return placeReservations(date, getAllRoomsByFloor(floorId));
-    }
-
-    public List<RoomDto> getAllRoomsByFloor(Long floorId) {
-        List<Room> rooms = roomRepository.findAllByFloorIdAndRoomDeletedFalse(floorId);
-        List<RoomDto> roomDtoList = rooms.stream()
-                .map(ReservationsMapper::RoomToRoomDto).collect(Collectors.toList());
-        roomDtoList.forEach(a-> a.setDesks(
-                deskRepository.findDeskByRoomIdAndDeskDeletedFalse(a.getRoomId()).stream()
-                        .map(ReservationsMapper::DeskToDeskToDto)
-                        .collect(Collectors.toList())
-        ));
-        return roomDtoList;
-    }
-
-    private List<RoomDto> placeReservations(LocalDate date, List<RoomDto> roomDtoList) {
-        List<Reservation> reservations = reservationsRepository.findReservationsByDateAndReservationStatusIsNull(date);
-        reservations.forEach(res -> {
-            int roomId = Math.toIntExact(res.getDesk().getRoom().getId());
-            int deskId = Math.toIntExact(res.getDesk().getId());
-            roomDtoList.stream()
-                    .filter(a -> a.getRoomId() == roomId)
-                    .findFirst().get().getDesks().stream()
-                    .filter(d -> d.getId() == deskId)
-                    .findFirst().get().reserveTable(res.getUser().getFirstName(), res.getUser().getLastName());
-        });
-        return roomDtoList;
-    }
-
-
-
-
 
     public void addNewDesk(DeskRequest deskRequest) {
         deskRepository.save(ReservationsMapper.DeskRequestToDesk(deskRequest, roomRepository));
-    }
-
-    public void addNewRoom(RoomRequest roomRequest) {
-        this.roomRepository.save(ReservationsMapper.RoomRequestToRoom(roomRequest, floorRepository));
-    }
-
-    public void editRoom(RoomRequest roomRequest) {
-        Room room = this.roomRepository.getById(roomRequest.getId());
-        room.setRoomName(roomRequest.getRoomName());
-        this.roomRepository.save(room);
     }
 
     public void editDesk(DeskRequest deskRequest) {

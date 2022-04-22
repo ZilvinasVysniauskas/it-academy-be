@@ -24,8 +24,8 @@ public class UserDto {
 
     private String email;
 
-    private String password;
-
     private Role role;
+
+    private Long defaultFloorId;
 
 }

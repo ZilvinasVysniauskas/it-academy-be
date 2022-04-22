@@ -14,12 +14,10 @@ import java.util.List;
 public class FloorController {
 
     private final FloorService floorService;
-    private final DesksService desksService;
     private final ReservationsService reservationsService;
 
-    public FloorController(FloorService floorService, DesksService desksService, ReservationsService reservationsService) {
+    public FloorController(FloorService floorService, ReservationsService reservationsService) {
         this.floorService = floorService;
-        this.desksService = desksService;
         this.reservationsService = reservationsService;
     }
 
@@ -28,14 +26,24 @@ public class FloorController {
         return floorService.getAllFloorsInBuilding(buildingId);
     }
 
+    @GetMapping("/floor/{floorId}")
+    public FloorDto getFloor(@PathVariable Long floorId) {
+        return floorService.getFloorById(floorId);
+    }
+
+    @GetMapping("/first")
+    public FloorDto getFirstFloor() {
+        return floorService.getFirstFloor();
+    }
+
     @PostMapping()
     public void addNewFloor(@RequestBody FloorRequest floorRequest) {
         floorService.addNewFloor(floorRequest);
     }
 
-    @DeleteMapping("/{floorId}")
-    public void deleteFloor(@PathVariable Long floorId) {
-        this.reservationsService.deleteFloorById(floorId);
+    @DeleteMapping("/{floorId}/{replaceFloorId}")
+    public void deleteFloor(@PathVariable Long floorId, Long replaceFloorId) {
+        this.reservationsService.deleteFloorById(floorId, replaceFloorId);
    }
 
 }

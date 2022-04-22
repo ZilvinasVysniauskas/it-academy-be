@@ -33,4 +33,6 @@ public class User {
 
     private String password;
 
+    private Long defaultFloorId;
+
 }

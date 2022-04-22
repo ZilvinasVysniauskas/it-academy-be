@@ -11,6 +11,8 @@ public class FloorMapper {
         return FloorDto.builder()
                 .floorNumber(floor.getFloorNumber())
                 .id(floor.getId())
+                .floorName(floor.getFloorName())
+                .buildingName(floor.getBuilding().getName())
                 .build();
     }
 
@@ -18,6 +20,7 @@ public class FloorMapper {
         return Floor.builder()
                 .building(buildingRepository.getById(floorRequest.getBuildingId()))
                 .floorNumber(floorRequest.getFloorNumber())
+                .floorName(floorRequest.getFloorName())
                 .build();
     }
 

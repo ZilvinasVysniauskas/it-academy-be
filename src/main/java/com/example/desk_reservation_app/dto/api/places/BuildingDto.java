@@ -3,15 +3,17 @@ package com.example.desk_reservation_app.dto.api.places;
 import lombok.Builder;
 import lombok.Data;
 
-@Builder
 @Data
-public class FloorDto {
+@Builder
+public class BuildingDto {
 
     private Long id;
 
-    private int floorNumber;
+    private String streetName;
 
-    private String floorName;
+    private String city;
+
+    private int buildingNumber;
 
     private String buildingName;
 

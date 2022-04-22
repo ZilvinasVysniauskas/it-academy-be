@@ -29,4 +29,12 @@ public class FloorService {
     public void addNewFloor(FloorRequest floorRequest) {
         this.floorRepository.save(FloorMapper.floorRequestToFloor(floorRequest, buildingRepository));
     }
+
+    public FloorDto getFloorById(Long floorId) {
+        return FloorMapper.floorToFloorDto(this.floorRepository.getById(floorId));
+    }
+
+    public FloorDto getFirstFloor() {
+        return FloorMapper.floorToFloorDto(this.floorRepository.findAll().get(0));
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.desk_reservation_app.services;
 
 import com.example.desk_reservation_app.dto.api.admin.ReservationsDto;
+import com.example.desk_reservation_app.dto.api.places.RoomDto;
 import com.example.desk_reservation_app.dto.mappers.desk.ReservationsMapper;
 import com.example.desk_reservation_app.dto.requests.ReservationRequest;
 import com.example.desk_reservation_app.models.*;
@@ -76,16 +77,13 @@ public class ReservationsService {
         LocalDate date = LocalDate.now();
         this.reservationsRepository.findReservationsByDeskIdAndDateGreaterThanEqual(id, date)
                 .forEach(reservation -> this.cancelReservation(reservation.getId()));
-//        reservationsToCancel.forEach(reservation -> {
-//            reservation.setReservationStatus(ReservationStatus.CANCELED);
-//            reservationsRepository.save(reservation);
-//        });
         Desk desk = deskRepository.getById(id);
         desk.setDeskDeleted(true);
         deskRepository.save(desk);
     }
 
     public void deleteRoom(Long id) {
+        //TODO išsiaiškink kam reikia idsToDelete
         Room room = roomRepository.getById(id);
         List<Long> idsToDelete = new java.util.ArrayList<>(List.of());
         room.getDesks().forEach(desk -> idsToDelete.add(desk.getId()));
@@ -94,8 +92,9 @@ public class ReservationsService {
         roomRepository.save(room);
     }
 
-    public void deleteFloorById(Long floorId) {
+    public void deleteFloorById(Long floorId, Long replaceFloorId) {
         Floor floor = floorRepository.getById(floorId);
+        changeDefaultFloorsForUsers(floorId, replaceFloorId);
         List<Long> idsToDelete = new java.util.ArrayList<>(List.of());
         floor.getRooms().forEach(room -> idsToDelete.add(room.getId()));
         idsToDelete.forEach(this::deleteRoom);
@@ -103,13 +102,48 @@ public class ReservationsService {
         floorRepository.save(floor);
     }
 
+    private void changeDefaultFloorsForUsers(Long floorId, Long replaceFloorId) {
+        List<User> userList = this.userRepository.findAllByDefaultFloorId(floorId);
+        userList.forEach(user -> user.setDefaultFloorId(replaceFloorId));
+    }
+
     public void deleteBuildingById(Long buildingId) {
-        Building building = buildingRepository.getById(buildingId);
-        List<Long> idsToDelete = new java.util.ArrayList<>(List.of());
-        building.getFloors().forEach(floor -> idsToDelete.add(floor.getId()));
-        idsToDelete.forEach(this::deleteFloorById);
-        building.setBuildingDeleted(true);
-        buildingRepository.save(building);
+//        Building building = buildingRepository.getById(buildingId);
+//        List<Long> idsToDelete = new java.util.ArrayList<>(List.of());
+//        building.getFloors().forEach(floor -> idsToDelete.add(floor.getId()));
+//        idsToDelete.forEach(this::deleteFloorById);
+//        building.setBuildingDeleted(true);
+//        buildingRepository.save(building);
+    }
+
+    public List<RoomDto> getAllDesksWithReservationsByDate(Long floorId, LocalDate date) {
+        return placeReservations(date, getAllRoomsByFloor(floorId));
+    }
+
+    public List<RoomDto> getAllRoomsByFloor(Long floorId) {
+        List<Room> rooms = roomRepository.findAllByFloorIdAndRoomDeletedFalse(floorId);
+        List<RoomDto> roomDtoList = rooms.stream()
+                .map(ReservationsMapper::RoomToRoomDto).collect(Collectors.toList());
+        roomDtoList.forEach(a-> a.setDesks(
+                deskRepository.findDeskByRoomIdAndDeskDeletedFalse(a.getRoomId()).stream()
+                        .map(ReservationsMapper::DeskToDeskToDto)
+                        .collect(Collectors.toList())
+        ));
+        return roomDtoList;
+    }
+
+    private List<RoomDto> placeReservations(LocalDate date, List<RoomDto> roomDtoList) {
+        List<Reservation> reservations = reservationsRepository.findReservationsByDateAndReservationStatusIsNull(date);
+        reservations.forEach(res -> {
+            int roomId = Math.toIntExact(res.getDesk().getRoom().getId());
+            int deskId = Math.toIntExact(res.getDesk().getId());
+            roomDtoList.stream()
+                    .filter(a -> a.getRoomId() == roomId)
+                    .findFirst().get().getDesks().stream()
+                    .filter(d -> d.getId() == deskId)
+                    .findFirst().get().reserveTable(res.getUser().getFirstName(), res.getUser().getLastName());
+        });
+        return roomDtoList;
     }
 
 

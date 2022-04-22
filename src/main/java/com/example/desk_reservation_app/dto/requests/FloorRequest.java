@@ -11,4 +11,6 @@ public class FloorRequest {
 
     private Long buildingId;
 
+    private String floorName;
+
 }
