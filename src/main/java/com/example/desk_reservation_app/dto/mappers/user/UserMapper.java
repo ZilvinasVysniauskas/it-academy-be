@@ -7,6 +7,7 @@ import com.example.desk_reservation_app.models.User;
 public class UserMapper {
 
     public static UserDto userToUserDto(User user) {
+        System.out.println(user);
         return UserDto.builder()
                 .email(user.getEmail())
                 .firstName(user.getFirstName())
