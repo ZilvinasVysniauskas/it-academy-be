@@ -1,5 +1,6 @@
 package com.example.desk_reservation_app.models;
 
+import com.example.desk_reservation_app.models.enums.Department;
 import com.example.desk_reservation_app.models.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,5 +37,7 @@ public class User {
     private String password;
 
     private Long defaultFloorId;
+
+    private Department department;
 
 }

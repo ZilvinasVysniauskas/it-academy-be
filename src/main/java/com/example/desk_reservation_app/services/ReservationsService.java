@@ -29,8 +29,9 @@ public class ReservationsService {
     private final FloorRepository floorRepository;
     private final BuildingRepository buildingRepository;
     private final JwtUtil jwtUtil;
+    private final NotificationsRepository notificationsRepository;
 
-    public ReservationsService(ReservationsRepository reservationsRepository, DeskRepository deskRepository, UserRepository userRepository, RoomRepository roomRepository, FloorRepository floorRepository, BuildingRepository buildingRepository, JwtUtil jwtUtil) {
+    public ReservationsService(ReservationsRepository reservationsRepository, DeskRepository deskRepository, UserRepository userRepository, RoomRepository roomRepository, FloorRepository floorRepository, BuildingRepository buildingRepository, JwtUtil jwtUtil, NotificationsRepository notificationsRepository) {
         this.reservationsRepository = reservationsRepository;
         this.deskRepository = deskRepository;
         this.userRepository = userRepository;
@@ -38,6 +39,7 @@ public class ReservationsService {
         this.floorRepository = floorRepository;
         this.buildingRepository = buildingRepository;
         this.jwtUtil = jwtUtil;
+        this.notificationsRepository = notificationsRepository;
     }
 
     public ResponseEntity<ReservationsDto> getUserReservationByDate(LocalDate date, String auth) {
@@ -77,10 +79,26 @@ public class ReservationsService {
     public void deleteDeskById(Long id) {
         LocalDate date = LocalDate.now();
         this.reservationsRepository.findReservationsByDeskIdAndDateGreaterThanEqual(id, date)
-                .forEach(reservation -> this.cancelReservation(reservation.getId()));
+                .forEach(reservation -> {
+                    this.cancelReservation(reservation.getId());
+                    this.notificationsRepository.save(formNotification(reservation));
+                });
         Desk desk = deskRepository.getById(id);
         desk.setDeskDeleted(true);
         deskRepository.save(desk);
+    }
+
+    private String cancelReservationMessage(Reservation reservation) {
+        return "your reservation on desk " + reservation.getDesk().getDeskName() + " in room "
+                + reservation.getDesk().getRoom().getRoomName() + " on " + reservation.getDate()
+                + " has been canceled, what you ganna do about it?";
+    }
+    private Notification formNotification(Reservation reservation){
+        return Notification.builder()
+                .date(LocalDate.now())
+                .message(cancelReservationMessage(reservation))
+                .userId(reservation.getUser().getUserId())
+                .build();
     }
 
     public void deleteRoom(Long id) {
@@ -115,12 +133,21 @@ public class ReservationsService {
 
     public List<RoomDto> getAllRoomsByFloor(Long floorId) {
         List<Room> rooms = roomRepository.findAllByFloorIdAndRoomDeletedFalse(floorId);
-        return rooms.stream()
-                .map(ReservationsMapper::RoomToRoomDto).collect(Collectors.toList());
+        List<RoomDto> roomDtoList = rooms.stream()
+                .map(ReservationsMapper::RoomToRoomDto).toList();
+        addDesksToRooms(roomDtoList);
+        return roomDtoList;
+    }
+
+    public void addDesksToRooms(List<RoomDto> roomDtoList) {
+        roomDtoList.forEach(a-> a.setDesks(
+                deskRepository.findDeskByRoomIdAndDeskDeletedFalse(a.getRoomId()).stream()
+                        .map(ReservationsMapper::DeskToDeskToDto)
+                        .collect(Collectors.toList())
+        ));
     }
 
     private List<RoomDto> placeReservations(LocalDate date, List<RoomDto> roomDtoList) {
-
         roomDtoList.forEach(roomDto -> {
                     List<DeskDto> deskDtoList = new java.util.ArrayList<>(List.of());
                     List<DeskDto> desksOfRoom = this.deskRepository.findDeskByRoomIdAndDeskDeletedFalse(roomDto.getRoomId())

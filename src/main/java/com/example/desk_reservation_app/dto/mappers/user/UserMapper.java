@@ -7,6 +7,7 @@ import com.example.desk_reservation_app.models.User;
 public class UserMapper {
 
     public static UserDto userToUserDto(User user) {
+        System.out.println(user);
         return UserDto.builder()
                 .email(user.getEmail())
                 .firstName(user.getFirstName())
@@ -15,6 +16,7 @@ public class UserMapper {
                 .middleName(user.getMiddleName())
                 .userId(user.getUserId())
                 .role(user.getRole())
+                .department(user.getDepartment())
                 .defaultFloorId(user.getDefaultFloorId())
                 .build();
     }
@@ -30,6 +32,7 @@ public class UserMapper {
                 .middleName(userRequest.getMiddleName())
                 .role(userRequest.getRole())
                 .password(password)
+                .department(userRequest.getDepartment())
                 .defaultFloorId(userRequest.getDefaultFloorId())
                 .build();
     }
