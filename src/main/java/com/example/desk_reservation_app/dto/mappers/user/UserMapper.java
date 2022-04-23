@@ -16,6 +16,7 @@ public class UserMapper {
                 .middleName(user.getMiddleName())
                 .userId(user.getUserId())
                 .role(user.getRole())
+                .department(user.getDepartment())
                 .defaultFloorId(user.getDefaultFloorId())
                 .build();
     }
@@ -31,6 +32,7 @@ public class UserMapper {
                 .middleName(userRequest.getMiddleName())
                 .role(userRequest.getRole())
                 .password(password)
+                .department(userRequest.getDepartment())
                 .defaultFloorId(userRequest.getDefaultFloorId())
                 .build();
     }

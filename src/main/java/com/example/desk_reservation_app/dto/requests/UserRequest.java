@@ -1,4 +1,5 @@
 package com.example.desk_reservation_app.dto.requests;
+import com.example.desk_reservation_app.models.enums.Department;
 import com.example.desk_reservation_app.models.enums.Role;
 import com.sun.istack.NotNull;
 import lombok.Data;
@@ -38,5 +39,8 @@ public class UserRequest {
 
     @NotNull
     private Long defaultFloorId;
+
+    @NotNull
+    private Department department;
 
 }
