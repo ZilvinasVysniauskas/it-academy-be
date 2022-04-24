@@ -1,5 +1,6 @@
 package com.example.desk_reservation_app.dto.api.places;
 
+import com.example.desk_reservation_app.models.enums.Department;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,5 +15,7 @@ public class FloorDto {
     private String floorName;
 
     private String buildingName;
+
+    private Department department;
 
 }

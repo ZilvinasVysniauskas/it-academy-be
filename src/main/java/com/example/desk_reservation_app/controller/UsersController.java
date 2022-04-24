@@ -1,7 +1,6 @@
 package com.example.desk_reservation_app.controller;
 
 
-import com.example.desk_reservation_app.dto.api.admin.ReservationsDto;
 import com.example.desk_reservation_app.dto.api.admin.UserDto;
 import com.example.desk_reservation_app.dto.requests.PasswordChangeRequest;
 import com.example.desk_reservation_app.dto.requests.UserRequest;
@@ -41,8 +40,6 @@ public class UsersController {
     public void addUser(@Valid @RequestBody UserRequest userRequest) {
         this.userService.addUser(userRequest);
     }
-
-
 
     //TODO change validations logic
     @GetMapping("/id/{userId}")

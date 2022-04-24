@@ -31,6 +31,16 @@ public class DesksController {
         return reservationsService.getAllDesksWithReservationsByDate(floorId, LocalDate.parse(date));
     }
 
+    @GetMapping("/disable/{id}")
+    public void disableDeskById(@PathVariable Long id) {
+        this.reservationsService.changeDeskAvailability(id, false);
+    }
+
+    @GetMapping("/enable/{id}")
+    public void enableDeskById(@PathVariable Long id) {
+        this.reservationsService.changeDeskAvailability(id, true);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteDeskById(@PathVariable String id) {
         reservationsService.deleteDeskById(Long.parseLong(id));

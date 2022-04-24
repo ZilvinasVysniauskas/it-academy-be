@@ -17,8 +17,10 @@ import java.time.LocalDate;
 @Table(uniqueConstraints = { @UniqueConstraint(name = "UniqueReservationDate", columnNames = { "date", "desk_id" }),
         @UniqueConstraint(name = "UniqueReservationsUser", columnNames = { "date", "user_user_id" })})
 public class Reservation {
+
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reservation_id_seq")
     private Long id;
 
     @ManyToOne

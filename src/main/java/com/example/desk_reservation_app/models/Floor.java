@@ -1,5 +1,6 @@
 package com.example.desk_reservation_app.models;
 
+import com.example.desk_reservation_app.models.enums.Department;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
@@ -26,6 +27,8 @@ public class Floor {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "floor")
     @ToString.Exclude
     private List<Room> rooms = List.of();
+
+    private Department department;
 
     @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL)

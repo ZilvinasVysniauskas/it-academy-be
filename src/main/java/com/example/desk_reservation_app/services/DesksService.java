@@ -42,6 +42,5 @@ public class DesksService {
         this.deskRepository.save(desk);
     }
 
-
 }
 

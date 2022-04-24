@@ -77,15 +77,19 @@ public class ReservationsService {
     }
 
     public void deleteDeskById(Long id) {
+        this.cancelReservationsOnDesk(id);
+        Desk desk = deskRepository.getById(id);
+        desk.setDeskDeleted(true);
+        deskRepository.save(desk);
+    }
+
+    private void cancelReservationsOnDesk(Long id) {
         LocalDate date = LocalDate.now();
         this.reservationsRepository.findReservationsByDeskIdAndDateGreaterThanEqual(id, date)
                 .forEach(reservation -> {
                     this.cancelReservation(reservation.getId());
                     this.notificationsRepository.save(formNotification(reservation));
                 });
-        Desk desk = deskRepository.getById(id);
-        desk.setDeskDeleted(true);
-        deskRepository.save(desk);
     }
 
     private String cancelReservationMessage(Reservation reservation) {
@@ -93,7 +97,8 @@ public class ReservationsService {
                 + reservation.getDesk().getRoom().getRoomName() + " on " + reservation.getDate()
                 + " has been canceled, what you ganna do about it?";
     }
-    private Notification formNotification(Reservation reservation){
+
+    private Notification formNotification(Reservation reservation) {
         return Notification.builder()
                 .date(LocalDate.now())
                 .message(cancelReservationMessage(reservation))
@@ -140,11 +145,18 @@ public class ReservationsService {
     }
 
     public void addDesksToRooms(List<RoomDto> roomDtoList) {
-        roomDtoList.forEach(a-> a.setDesks(
+        roomDtoList.forEach(a -> a.setDesks(
                 deskRepository.findDeskByRoomIdAndDeskDeletedFalse(a.getRoomId()).stream()
                         .map(ReservationsMapper::DeskToDeskToDto)
                         .collect(Collectors.toList())
         ));
+    }
+
+    public void changeDeskAvailability(Long id, boolean status) {
+        cancelReservationsOnDesk(id);
+        Desk desk = this.deskRepository.getById(id);
+        desk.set_available(status);
+        this.deskRepository.save(desk);
     }
 
     private List<RoomDto> placeReservations(LocalDate date, List<RoomDto> roomDtoList) {

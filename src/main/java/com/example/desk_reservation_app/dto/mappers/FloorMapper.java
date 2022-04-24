@@ -13,6 +13,7 @@ public class FloorMapper {
                 .id(floor.getId())
                 .floorName(floor.getFloorName())
                 .buildingName(floor.getBuilding().getName())
+                .department(floor.getDepartment())
                 .build();
     }
 
@@ -21,6 +22,7 @@ public class FloorMapper {
                 .building(buildingRepository.getById(floorRequest.getBuildingId()))
                 .floorNumber(floorRequest.getFloorNumber())
                 .floorName(floorRequest.getFloorName())
+                .department(floorRequest.getDepartment())
                 .build();
     }
 
