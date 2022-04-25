@@ -18,4 +18,7 @@ public class FloorDto {
 
     private Department department;
 
+    private byte[] floorPlan;
+
+
 }

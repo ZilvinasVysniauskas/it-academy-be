@@ -30,6 +30,8 @@ public class Floor {
 
     private Department department;
 
+    private byte[]  floorPlan;
+
     @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "building_id", referencedColumnName = "id")

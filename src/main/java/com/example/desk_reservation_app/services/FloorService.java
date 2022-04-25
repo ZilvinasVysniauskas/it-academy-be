@@ -7,7 +7,9 @@ import com.example.desk_reservation_app.models.Floor;
 import com.example.desk_reservation_app.repositories.BuildingRepository;
 import com.example.desk_reservation_app.repositories.FloorRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +18,7 @@ public class FloorService {
 
     private final FloorRepository floorRepository;
     private final BuildingRepository buildingRepository;
+
 
     public FloorService(FloorRepository floorRepository, BuildingRepository buildingRepository) {
         this.floorRepository = floorRepository;
@@ -35,13 +38,15 @@ public class FloorService {
         return FloorMapper.floorToFloorDto(this.floorRepository.getById(floorId));
     }
 
-    public FloorDto getFirstFloor() {
-        return FloorMapper.floorToFloorDto(this.floorRepository.findAll().get(0));
-    }
-
     public void editFloor(FloorRequest floorRequest) {
         Floor floor = this.floorRepository.getById(floorRequest.getId());
         floor.setFloorName(floorRequest.getFloorName());
         this.floorRepository.save(floor);
+    }
+
+    public void changeFloorPlan(MultipartFile image, Long id) throws IOException {
+        Floor floor = this.floorRepository.getById(id);
+        floor.setFloorPlan(image.getBytes());
+        floorRepository.save(floor);
     }
 }

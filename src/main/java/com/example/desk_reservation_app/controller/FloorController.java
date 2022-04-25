@@ -2,11 +2,14 @@ package com.example.desk_reservation_app.controller;
 
 import com.example.desk_reservation_app.dto.api.places.FloorDto;
 import com.example.desk_reservation_app.dto.requests.FloorRequest;
+import com.example.desk_reservation_app.models.enums.Department;
 import com.example.desk_reservation_app.services.DesksService;
 import com.example.desk_reservation_app.services.FloorService;
 import com.example.desk_reservation_app.services.ReservationsService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -31,19 +34,32 @@ public class FloorController {
         return floorService.getFloorById(floorId);
     }
 
-    @GetMapping("/first")
-    public FloorDto getFirstFloor() {
-        return floorService.getFirstFloor();
-    }
 
     @PostMapping()
-    public void addNewFloor(@RequestBody FloorRequest floorRequest) {
+    public void addNewFloor(@RequestParam("myFile") MultipartFile image,
+                            @RequestParam("floorName")String  floorName,
+                            @RequestParam("floorNumber")String  floorNumber,
+                            @RequestParam("buildingId")String  buildingId,
+                            @RequestParam("department")String  department ) throws IOException {
+        FloorRequest floorRequest = FloorRequest.builder()
+                .floorName(floorName)
+                .buildingId(Long.parseLong(buildingId))
+                .department(Department.valueOf(department))
+                .floorNumber(Integer.parseInt(floorNumber))
+                .floorPlan(image.getBytes())
+                .build();
         floorService.addNewFloor(floorRequest);
     }
 
     @PutMapping()
-    public void editFloor(@RequestBody FloorRequest floorRequest) {
+    public void editFloorName(@RequestBody FloorRequest floorRequest) {
         this.floorService.editFloor(floorRequest);
+    }
+
+    @PutMapping("/plan")
+    public void editFloorImage(@RequestParam("floorPlan") MultipartFile image,
+                               @RequestParam("floorId") String id) throws IOException {
+        this.floorService.changeFloorPlan(image, Long.parseLong(id));
     }
 
     @DeleteMapping("/{floorId}/{replaceFloorId}")
