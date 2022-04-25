@@ -27,4 +27,8 @@ public class Notification {
 
     private boolean opened = false;
 
+    private boolean messageFromAdmin = false;
+
+    private boolean messageDeleted;
+
 }

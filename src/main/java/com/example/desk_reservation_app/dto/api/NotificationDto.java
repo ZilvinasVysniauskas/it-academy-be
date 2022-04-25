@@ -9,6 +9,8 @@ import java.time.LocalDate;
 @Builder
 public class NotificationDto {
 
+    private Long id;
+
     private String message;
 
     private LocalDate date;

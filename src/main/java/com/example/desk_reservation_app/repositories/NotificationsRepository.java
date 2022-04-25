@@ -8,6 +8,7 @@ import java.util.List;
 
 @Repository
 public interface NotificationsRepository extends JpaRepository<Notification, Long> {
-    List<Notification> findAllByOpenedFalseAndUserId(Long id);
-    List<Notification> findAllByUserId(Long id);
+    List<Notification> findAllByOpenedFalseAndUserIdAndMessageFromAdminFalse(Long id);
+    List<Notification> findAllByUserIdAndMessageFromAdminFalseAndMessageDeletedFalse(Long id);
+    List<Notification> findAllByUserIdAndMessageFromAdminTrueAndMessageDeletedFalse(Long id);
 }

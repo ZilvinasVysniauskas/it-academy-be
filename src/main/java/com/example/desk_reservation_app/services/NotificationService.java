@@ -3,6 +3,7 @@ package com.example.desk_reservation_app.services;
 import com.example.desk_reservation_app.dto.api.NotificationDto;
 import com.example.desk_reservation_app.dto.mappers.NotificationMapper;
 import com.example.desk_reservation_app.dto.requests.NotificationRequest;
+import com.example.desk_reservation_app.models.Notification;
 import com.example.desk_reservation_app.models.enums.Department;
 import com.example.desk_reservation_app.repositories.NotificationsRepository;
 import com.example.desk_reservation_app.repositories.UserRepository;
@@ -26,12 +27,17 @@ public class NotificationService {
     }
 
     public List<NotificationDto> getAllNotifications(String auth) {
-        return this.notificationsRepository.findAllByUserId(this.jwtUtil.getSubject(auth)).stream()
+        return this.notificationsRepository.findAllByUserIdAndMessageFromAdminFalseAndMessageDeletedFalse(this.jwtUtil.getSubject(auth)).stream()
+                .map(NotificationMapper::notificationToNotificationDto).collect(Collectors.toList());
+    }
+
+    public List<NotificationDto> getAllNotificationsFromAdmin(String auth) {
+        return this.notificationsRepository.findAllByUserIdAndMessageFromAdminTrueAndMessageDeletedFalse(this.jwtUtil.getSubject(auth)).stream()
                 .map(NotificationMapper::notificationToNotificationDto).collect(Collectors.toList());
     }
 
     public List<NotificationDto> getUnopenedNotification(String auth) {
-        return this.notificationsRepository.findAllByOpenedFalseAndUserId(this.jwtUtil.getSubject(auth)).stream()
+        return this.notificationsRepository.findAllByOpenedFalseAndUserIdAndMessageFromAdminFalse(this.jwtUtil.getSubject(auth)).stream()
                 .map(notification -> {
                     notification.setOpened(true);
                     this.notificationsRepository.save(notification);
@@ -40,15 +46,30 @@ public class NotificationService {
     }
 
     public void sendNotificationToUser(NotificationRequest notificationRequest) {
+        notificationRequest.setSentFromAdmin(true);
         this.notificationsRepository.save(NotificationMapper.notificationRequestToNotification(notificationRequest));
     }
 
     public void sendNotificationToDepartment(NotificationRequest notificationRequest, Department department) {
-        System.out.println(department);
+        notificationRequest.setSentFromAdmin(true);
         this.userRepository.findAllByDepartment(department).forEach(user -> {
             notificationRequest.setUserId(user.getUserId());
             this.notificationsRepository.save(NotificationMapper.notificationRequestToNotification(notificationRequest));
         });
 
+    }
+
+    public void sendNotificationToAll(NotificationRequest notificationRequest) {
+        userRepository.findAll().forEach( user -> {
+            notificationRequest.setUserId(user.getUserId());
+            notificationRequest.setSentFromAdmin(true);
+            this.notificationsRepository.save(NotificationMapper.notificationRequestToNotification(notificationRequest));
+        });
+    }
+
+    public void deleteNotificationById(Long id) {
+        Notification notificationToDelete = this.notificationsRepository.getById(id);
+        notificationToDelete.setMessageDeleted(true);
+        this.notificationsRepository.save(notificationToDelete);
     }
 }

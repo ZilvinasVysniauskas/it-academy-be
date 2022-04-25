@@ -10,6 +10,8 @@ public class NotificationRequest {
 
     private String message;
 
-    private Long userId = null;
+    private Long userId;
+
+    private boolean sentFromAdmin;
 
 }

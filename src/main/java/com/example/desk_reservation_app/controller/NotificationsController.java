@@ -23,6 +23,11 @@ public class NotificationsController {
         return this.notificationService.getUnopenedNotification(auth);
     }
 
+    @GetMapping("/admin")
+    public List<NotificationDto> getAllNotificationsFromAdmin(@RequestHeader("Authorization") String auth) {
+        return this.notificationService.getAllNotificationsFromAdmin(auth);
+    }
+
     @GetMapping
     public List<NotificationDto> getUnopenedNotifications(@RequestHeader("Authorization") String auth) {
         return this.notificationService.getAllNotifications(auth);
@@ -37,5 +42,16 @@ public class NotificationsController {
     public void sendNotificationToDepartment(@RequestBody NotificationRequest notificationRequest, @PathVariable Department department) {
         this.notificationService.sendNotificationToDepartment(notificationRequest, department);
     }
+
+    @PostMapping("/all")
+    public void sendNotificationToAll(@RequestBody NotificationRequest notificationRequest) {
+        this.notificationService.sendNotificationToAll(notificationRequest);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteNotificationById(@PathVariable Long id ) {
+        this.notificationService.deleteNotificationById(id);
+    }
+
 
 }
