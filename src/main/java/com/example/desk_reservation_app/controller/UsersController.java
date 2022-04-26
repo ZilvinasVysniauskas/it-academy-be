@@ -26,6 +26,11 @@ public class UsersController {
         return userService.getAllUsers();
     }
 
+    @GetMapping("/user")
+    public UserDto getUser(@RequestHeader("Authorization") String auth) {
+        return userService.getUser(auth);
+    }
+
     @PutMapping()
     public void editUser(@Valid @RequestBody UserRequest userRequest) {
         this.userService.editUser(userRequest);

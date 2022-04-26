@@ -7,12 +7,8 @@ import com.example.desk_reservation_app.dto.requests.UserRequest;
 import com.example.desk_reservation_app.models.User;
 import com.example.desk_reservation_app.repositories.UserRepository;
 import com.example.desk_reservation_app.util.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -83,5 +79,9 @@ public class UserService {
             return new ResponseEntity<>("passwords does not match", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>("Wrong password", HttpStatus.BAD_REQUEST);
+    }
+
+    public UserDto getUser(String auth) {
+        return UserMapper.userToUserDto(this.userRepository.getById(jwtUtil.getSubject(auth)));
     }
 }
