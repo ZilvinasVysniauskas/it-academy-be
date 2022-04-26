@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface ReservationsRepository extends JpaRepository<Reservation, Long> {
     Optional<Reservation> findReservationsByDateAndDeskIdAndReservationStatusIsNull(LocalDate date, Long id);
-    List<Reservation> findReservationsByUserUserId(Long id);
+    List<Reservation> findReservationsByUserUserIdOrderByDateDesc(Long id);
     List<Reservation> findReservationsByDeskIdAndDateGreaterThanEqual(Long id, LocalDate date);
     Optional<Reservation> findReservationsByDateAndUserUserIdAndReservationStatusIsNull(LocalDate date, Long userId);
 }

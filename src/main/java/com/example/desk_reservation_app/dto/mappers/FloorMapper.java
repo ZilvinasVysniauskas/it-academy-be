@@ -11,7 +11,6 @@ public class FloorMapper {
 
 
     public static FloorDto floorToFloorDto(Floor floor) {
-
         return FloorDto.builder()
                 .floorNumber(floor.getFloorNumber())
                 .id(floor.getId())

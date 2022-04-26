@@ -49,7 +49,7 @@ public class ReservationsService {
     }
 
     public List<ReservationsDto> getAllReservationsByUserId(String auth) {
-        List<Reservation> allUserReservations = this.reservationsRepository.findReservationsByUserUserId(this.jwtUtil.getSubject(auth));
+        List<Reservation> allUserReservations = this.reservationsRepository.findReservationsByUserUserIdOrderByDateDesc(this.jwtUtil.getSubject(auth));
         allUserReservations.sort(Comparator.comparing(Reservation::getDate));
         allUserReservations.forEach(reservation -> {
             if (reservation.getReservationStatus() == null) {
@@ -128,8 +128,22 @@ public class ReservationsService {
 
     private void changeDefaultFloorsForUsers(Long floorId, Long replaceFloorId) {
         List<User> userList = this.userRepository.findAllByDefaultFloorId(floorId);
-        userList.forEach(user -> user.setDefaultFloorId(replaceFloorId));
+        userList.forEach(user -> {
+            this.notificationsRepository.save(buildChangedFloorNotification(user, floorId, replaceFloorId));
+            user.setDefaultFloorId(replaceFloorId);
+        });
         this.userRepository.saveAll(userList);
+    }
+
+    private Notification buildChangedFloorNotification(User user,Long currentFloorId, Long replaceFloorId) {
+        Floor replacementFloor = this.floorRepository.getById(replaceFloorId);
+        Floor currentFloor = this.floorRepository.getById(currentFloorId);
+        return Notification.builder()
+                .messageFromAdmin(false)
+                .date(LocalDate.now())
+                .message("Floor " + currentFloor.getFloorName() + " is no longer available." + " Your new primary floor is " + replacementFloor.getFloorName())
+                .userId(user.getUserId())
+                .build();
     }
 
     public List<RoomDto> getAllDesksWithReservationsByDate(Long floorId, LocalDate date) {

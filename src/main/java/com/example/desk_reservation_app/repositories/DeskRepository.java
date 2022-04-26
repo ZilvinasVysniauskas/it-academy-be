@@ -13,5 +13,6 @@ import java.util.List;
 public interface DeskRepository extends JpaRepository<Desk, Long> {
 
     List<Desk> findDeskByRoomIdAndDeskDeletedFalse(Long roomId);
+
 }
 

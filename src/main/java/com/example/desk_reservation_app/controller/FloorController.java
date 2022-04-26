@@ -34,7 +34,6 @@ public class FloorController {
         return floorService.getFloorById(floorId);
     }
 
-
     @PostMapping()
     public void addNewFloor(@RequestParam("myFile") MultipartFile image,
                             @RequestParam("floorName")String  floorName,
