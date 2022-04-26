@@ -50,7 +50,6 @@ public class ReservationsService {
 
     public List<ReservationsDto> getAllReservationsByUserId(String auth) {
         List<Reservation> allUserReservations = this.reservationsRepository.findReservationsByUserUserIdOrderByDateDesc(this.jwtUtil.getSubject(auth));
-        allUserReservations.sort(Comparator.comparing(Reservation::getDate));
         allUserReservations.forEach(reservation -> {
             if (reservation.getReservationStatus() == null) {
                 reservation.setReservationStatus(ReservationStatus.ACTIVE);
