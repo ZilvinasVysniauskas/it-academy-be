@@ -92,9 +92,9 @@ public class ReservationsService {
     }
 
     private String cancelReservationMessage(Reservation reservation) {
-        return "your reservation on desk " + reservation.getDesk().getDeskName() + " in room "
+        return "Your reservation on desk " + reservation.getDesk().getDeskName() + " in room "
                 + reservation.getDesk().getRoom().getRoomName() + " on " + reservation.getDate()
-                + " has been canceled, what you ganna do about it?";
+                + " has been canceled";
     }
 
     private Notification formNotification(Reservation reservation) {
@@ -106,7 +106,6 @@ public class ReservationsService {
     }
 
     public void deleteRoom(Long id) {
-        //TODO išsiaiškink kam reikia idsToDelete
         Room room = roomRepository.getById(id);
         List<Long> idsToDelete = new java.util.ArrayList<>(List.of());
         room.getDesks().forEach(desk -> idsToDelete.add(desk.getId()));
