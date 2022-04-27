@@ -38,16 +38,17 @@ public class ReservationsMapper {
                 .build();
     }
 
-    public static ReservationsDto ReservationToReservationDto(Reservation reservations) {
+    public static ReservationsDto ReservationToReservationDto(Reservation reservation) {
         return ReservationsDto.builder()
-                .reservationId(reservations.getId())
-                .date(reservations.getDate())
-                .deskName(reservations.getDesk().getDeskName())
-                .roomName(reservations.getDesk().getRoom().getRoomName())
-                .buildingName(reservations.getDesk().getRoom().getFloor().getBuilding().getName())
-                .reservationStatus(reservations.getReservationStatus())
-                .floorNumber(reservations.getDesk().getRoom().getFloor().getFloorNumber())
-                .deskId(reservations.getDesk().getId())
+                .floorName(reservation.getDesk().getRoom().getFloor().getFloorName())
+                .reservationId(reservation.getId())
+                .date(reservation.getDate())
+                .deskName(reservation.getDesk().getDeskName())
+                .roomName(reservation.getDesk().getRoom().getRoomName())
+                .buildingName(reservation.getDesk().getRoom().getFloor().getBuilding().getName())
+                .reservationStatus(reservation.getReservationStatus())
+                .floorNumber(reservation.getDesk().getRoom().getFloor().getFloorNumber())
+                .deskId(reservation.getDesk().getId())
                 .build();
     }
 
