@@ -29,6 +29,8 @@ public class FloorController {
         return floorService.getAllFloorsInBuilding(buildingId);
     }
 
+
+
     @GetMapping("/floor/{floorId}")
     public FloorDto getFloor(@PathVariable Long floorId) {
         return floorService.getFloorById(floorId);
