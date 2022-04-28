@@ -109,14 +109,14 @@ create table reservation
 );
 
 INSERT INTO address (id, city, number, street)
-VALUES (1, 'Vilnius', 20, 'Citadel Of Ricks '),
+VALUES (1, 'Vilnius', 20, ' '),
        (2, 'Vilnius', 15, 'Albuquerque .'),
-       (3, 'Vilnius', 3, 'South Park Town g.');
+       (3, 'Vilnius', 3, 'South Park  g.');
 
 INSERT INTO building (id, name, address_id, building_deleted)
-VALUES (1, ' cI', 1, false),
-       (2, ' Centras', 2, false),
-       (3, ' Šiaurės Miestelis', 3, false);
+VALUES (1, 'Citadel Of Ricks', 1, false),
+       (2, 'Albuquerque', 2, false),
+       (3, 'South Park', 3, false);
 
 
 INSERT INTO public.floor (id, department, floor_deleted, floor_name, floor_number, floor_plan, building_id)
