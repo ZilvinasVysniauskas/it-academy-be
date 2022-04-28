@@ -38,8 +38,12 @@ public class NotificationsController {
                 .method("POST", HttpRequest.BodyPublishers.ofString("    {\\r\\n        \\\"key1\\\": \\\"value\\\",\\r\\n        \\\"key2\\\": \\\"value\\\",\\r\\n    }"))
                 .build();
         HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        String quote = response.body();
+        if (quote.endsWith("null")){
+            quote = quote.substring(0, quote.length() - 5) + "-Unknown Author";
+        }
         NotificationRequest notificationRequest = NotificationRequest.builder()
-                .message(response.body())
+                .message(quote)
                 .sentFromAdmin(true)
                 .build();
         this.notificationService.sendNotificationToAll(notificationRequest);
