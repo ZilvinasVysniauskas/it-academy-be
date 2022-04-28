@@ -6,6 +6,11 @@ import com.example.desk_reservation_app.models.enums.Department;
 import com.example.desk_reservation_app.services.NotificationService;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 
 @RestController
@@ -21,6 +26,23 @@ public class NotificationsController {
     @GetMapping("/new")
     public List<NotificationDto> getAllNotifications(@RequestHeader("Authorization") String auth) {
         return this.notificationService.getUnopenedNotification(auth);
+    }
+
+    @GetMapping("/motivate")
+    public void motivate() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://motivational-quotes1.p.rapidapi.com/motivation"))
+                .header("content-type", "application/json")
+                .header("X-RapidAPI-Host", "motivational-quotes1.p.rapidapi.com")
+                .header("X-RapidAPI-Key", "ab305e437cmshf2a99448d6f2adfp163a5ejsn0000cdc3f0e2")
+                .method("POST", HttpRequest.BodyPublishers.ofString("    {\\r\\n        \\\"key1\\\": \\\"value\\\",\\r\\n        \\\"key2\\\": \\\"value\\\",\\r\\n    }"))
+                .build();
+        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+        NotificationRequest notificationRequest = NotificationRequest.builder()
+                .message(response.body())
+                .sentFromAdmin(true)
+                .build();
+        this.notificationService.sendNotificationToAll(notificationRequest);
     }
 
     @GetMapping("/admin")
