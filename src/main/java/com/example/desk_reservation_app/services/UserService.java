@@ -70,15 +70,15 @@ public class UserService {
         if (currentPasswordMatch) {
             if (passwordChangeRequest.getNewPassword().equals(passwordChangeRequest.getNewPasswordRepeat())){
                 if (passwordChangeRequest.getNewPassword().equals(passwordChangeRequest.getCurrentPassword())){
-                    return new ResponseEntity<>("new password can not be the same as old password", HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity<>("New password can not be the same as old password", HttpStatus.BAD_REQUEST);
                 }
                 user.setPassword(passwordEncoder.encode(passwordChangeRequest.getNewPassword()));
                 this.userRepository.save(user);
-                return new ResponseEntity<>("password changed successfully", HttpStatus.OK);
+                return new ResponseEntity<>("Password changed successfully", HttpStatus.OK);
             }
-            return new ResponseEntity<>("passwords does not match", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Passwords do not match", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("Wrong password", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Wrong current password", HttpStatus.BAD_REQUEST);
     }
 
     public UserDto getUser(String auth) {
