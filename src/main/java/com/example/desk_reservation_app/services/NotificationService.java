@@ -32,7 +32,7 @@ public class NotificationService {
     }
 
     public List<NotificationDto> getAllNotificationsFromAdmin(String auth) {
-        return this.notificationsRepository.findAllByUserIdAndMessageFromAdminTrueAndMessageDeletedFalse(this.jwtUtil.getSubject(auth)).stream()
+        return this.notificationsRepository.findAllByUserIdAndMessageFromAdminTrueAndMessageDeletedFalseOrderByCreateDateDesc(this.jwtUtil.getSubject(auth)).stream()
                 .map(NotificationMapper::notificationToNotificationDto).collect(Collectors.toList());
     }
 

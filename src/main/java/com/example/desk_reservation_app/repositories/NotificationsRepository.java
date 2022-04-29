@@ -10,5 +10,5 @@ import java.util.List;
 public interface NotificationsRepository extends JpaRepository<Notification, Long> {
     List<Notification> findAllByOpenedFalseAndUserIdAndMessageFromAdminFalse(Long id);
     List<Notification> findAllByUserIdAndMessageFromAdminFalseAndMessageDeletedFalse(Long id);
-    List<Notification> findAllByUserIdAndMessageFromAdminTrueAndMessageDeletedFalse(Long id);
+    List<Notification> findAllByUserIdAndMessageFromAdminTrueAndMessageDeletedFalseOrderByCreateDateDesc(Long id);
 }

@@ -17,7 +17,6 @@ public class NotificationMapper {
     }
 
     public static Notification notificationRequestToNotification(NotificationRequest notificationRequest) {
-        System.out.println(notificationRequest);
         return Notification.builder()
                 .date(LocalDate.now())
                 .messageFromAdmin(notificationRequest.isSentFromAdmin())
